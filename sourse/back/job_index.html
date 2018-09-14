@@ -1,0 +1,796 @@
+{extend name="common_view/base_block" /}
+
+{block name="head"}
+  <link rel="stylesheet" href="__{SRC}__/base/ice_alert/ice_alert.css">
+  <link rel="stylesheet" href="__{SRC}__/components/subTag/subTag.css">
+{/block}
+
+{block name="content_body"}
+
+<div id="findJob">
+  <div class="section">
+    <div class="secHeader">
+      <div class="secHeader_nav">
+        <a class="findJob_nav active" href="/job">求职列表</a>
+        <a class="findJob_nav" :href="loginState ? '/job/my' : 'javascript:void(0)'" @click='notlogin'>我的订阅</a>
+      </div>
+    </div>
+    <div label="求职列表" class="findJob-list" name="findJob-list">
+      <div class="left">
+        <i-input v-model="searchInputValue" class="search-input" placeholder="输入你感兴趣的企业名称" @on-change="" @on-focus="_comNameReset_btnState(1)" @on-blur="_comNameReset_btnState(0, $event)" @on-enter="companyName_search"
+          v-show="true" style="display: none;">
+          <span slot="append" @click="companyName_search">
+            搜索
+          </span>
+        </i-input>
+        <a href="javascript:void(0)" class="companyName_reset" @click="companyName_reset" style="display: none" ref="companyName_reset">
+          <i class="nc-icon nc-simple-remove"></i>
+        </a>
+        <div class="typeSelect" v-show="true" style="display: none">
+          <ul class="typeWrapper" ref="typeWrapper">
+            <li class="typeItem">
+              <div class="typeName">行业类别：</div>
+              <ul class="wrapper">
+                <li class="item" v-for="i in subscribeIdustryData" :data-id="i.id" :class="[search.industry_id == i.id ? 'active':'']" @click="industry_id(i.id)">{{ i.name }}</li>
+              </ul>
+              <a class="addOrSubtract" data-state="0" href="javascript:void(0)" @click="_typeDetailChange">
+                <i class="nc-icon nc-circle-bold-add"></i>
+              </a>
+            </li>
+            <li class="typeItem">
+              <div class="typeName">工作城市：</div>
+              <ul class="wrapper">
+                <li class="item" v-for="i in cityData" :data-id="i.id" :class="[search.city_id == i.id ? 'active':'']" @click="city_id(i.id)">{{ i.name }}</li>
+              </ul>
+              <a class="addOrSubtract" data-state="0" href="javascript:void(0)" @click="_typeDetailChange">
+                <i class="nc-icon nc-circle-bold-add"></i>
+              </a>
+            </li>
+            <li class="typeItem">
+              <div class="typeName">职位类别：</div>
+              <ul class="wrapper">
+                <li class="item" v-for="i in positionTypeData" :data-id="i.id" :class="[search.positionType_id == i.id ? 'active':'']" @click="positionType_id(i.id)">{{ i.name }}</li>
+              </ul>
+              <a class="addOrSubtract" data-state="0" href="javascript:void(0)" @click="_typeDetailChange">
+                <i class="nc-icon nc-circle-bold-add"></i>
+              </a>
+            </li>
+            <li class="typeItem">
+              <div class="typeName">职位性质：</div>
+              <ul class="wrapper">
+                <li class="item" :class="[search.position_id == 0 ? 'active':'']" data-id="0" @click="position_id(0)">不限</li>
+                <li class="item" :class="[search.position_id == 1 ? 'active':'']" data-id="{$job_type.full_time}" @click="position_id({$job_type.full_time})">全职</li>
+                <li class="item" :class="[search.position_id == 2 ? 'active':'']" data-id="{$job_type.part_time}" @click="position_id({$job_type.part_time})">实习</li>
+              </ul>
+              <a class="addOrSubtract" href="javascript:void(0)" @click="_typeDetailChange">
+                <i class="nc-icon nc-circle-bold-add"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="companyWrapper" v-show="true" style="display: none">
+          <div class="comHeader">
+            <radio-group v-model="comChannelType" @on-change="jobType_id">
+              <Radio label="全部"  data-val="0" ></Radio>
+              <Radio label="官方校招" data-val="{$source.official}"></Radio>
+             <!--  <Radio label="白熊内推" data-val="{$source.neitui}"></Radio> -->
+            </radio-group>
+
+            <i-select class="sortSelect" v-model="sortModel" size="small" style="width:148px" @on-change="sortType_id">
+              <i-option value="{$order.hot}"          key="{$order.hot}" >按照热门程度排序</i-option>
+              <i-option value="{$order.deadline}"     key="{$order.deadline}">按照截止日期排序</i-option>
+              <i-option value="{$order.new}"          key="{$order.new}">按照更新时间排序</i-option>
+            </i-select>
+
+          </div>
+          <scroll class="companyList" :scroll-state="scrollState" @scrollAddData="scrollAddData">
+            <div v-if="notCompanyData" class='emptyWrapper'>
+              <div v-if="subscribeState">
+                <div class="emptyText">暂无搜索结果。创建自己专属订阅，第一时间获取求职信息。</div>
+                <div class="p-t-20"><button class="btn-secondary btn-circle btn-md" @click="useChildFn">开始创建</button></div>
+              </div>
+              <div v-else>
+                <!-- <img class='emptyImg' data-rjs="2" src="__{SRC}__/images/empty.png" alt=""> -->
+                <div class="emptyText">暂无搜索结果。</div>
+              </div>
+            </div>
+            <li class="comItem" :class="{lastComItem: companyList.length - 1 === index}" v-for="(item, index) in companyList">
+              <div class="row">
+                <!-- <a :href="loginState ? item.url : 'javascript:void(0)'" @click="notlogin"><img class="avater" :src="item.avater" alt=""></a> -->
+                <a :href="item.url" target='_blank'><img class="avater" :src="item.avater" alt=""></a>
+                <div class="about">
+                  <span class="comChannelType">{{ item.channelType }}</span>
+                  <span class="comType" v-if="item.comtype.length">{{ item.comtype }}</span>
+                  <a :href="item.url" target='_blank'><span class="companyName">{{ item.companyName }}</span></a>
+                  <div class="position">
+                    职位：<span class="posiType">{{ item.posiType }}</span>
+                  </div>
+                  <div class="city">
+                    城市：<span class="cityType">{{ item.cityType }}</span>
+                  </div>
+                </div>
+                <div class="detailBlock">
+                  <Poptip trigger="hover" placement="bottom" :content="item.collectState ? '取消收藏' : '收藏'">
+                    <i class="nc-icon" :class="{'nc-shape-star-2': item.collectState , 'nc-shape-star': !item.collectState}" @click="_collectCompany($event, item)"></i>
+                  </Poptip>
+                  <a :href="item.url" class="detail">查看详情</a>
+                </div>
+              </div>
+              <div class="row">
+                <!-- <sub-tag :sub-tags="item.subTags" :login-state="loginState" @nearSubAlertEl="_nearSubAlertEl" @updataSubData="updataSubData" :subTagAlertEls="subTagAlertEls">{{item.subTags.tag_name}}</sub-tag> -->
+                <div class="time" v-if="item.time.length">{{ item.time }} {{ item.applyState ? '（已获取）' : ''}}</div>
+              </div>
+            </li>
+          </scroll>
+        </div>
+      </div>
+      <findjob-right @createrighttabs="_createRightTabs" :my-sub-content="mySubContent" :sub-data="subData" :left-sub-id-change="leftSubIdChange" @openupdatasub="openUpdataSub" @getsubscribestatus="getSubscribeStatus" ref="findjobright">
+        <!-- 用户的窗口 -->
+        <!-- <user-window :user-message="userMessage" :login-status="global.loginStatus"></user-window> -->
+        {:widget('User/info',['info_type'=>'job'])}
+
+      </findjob-right>
+    </div>
+  </div>
+  <!-- 修改订阅的弹窗 -->
+  <updatasub-alert :updata-subscribe-state="updataSubscribeState" @getsubstate="getSubState" @getmysubcontent="get_mySubContent"></updatasub-alert>
+</div>
+
+
+{/block}
+
+
+
+{block name="footer_js"}
+  <!--  <script src="__{SRC}__/ajax/ajax.js"></script>
+  <script src="__{SRC}__/base/ice_alert/ice_alert.js"></script>
+ <script src="__{SRC}__/components/toast/toast.js"></script>
+  <script src="__{SRC}__/components/subTag/subTag.js"></script>
+  <script src="__{SRC}__/components/scroll/scroll.js"></script>
+  <script src="__{SRC}__/components/userWindow/userWindow.js"></script> -->
+
+  <!-- {/*引入右边的订阅信息组件*/} -->
+ <!--  <script src="__{SRC}__/components/findJobRight/findJobRight.js"></script>
+  <script src="__{SRC}__/components/updataSubAlert/updataSubAlert.js"></script> -->
+  <script>
+  <!--{/* 右侧订阅数据 */}-->
+  var global_subData=[
+	  {notempty  name="all_tag_list"}
+				{volist name="all_tag_list" id="r_tag"}
+					{
+		        id: {$r_tag.id|default='0'},
+		        title: '{$r_tag.tag_name|default=''}',
+		        sub_img: '{$r_tag.logo|default=''}',
+		        content: '{$r_tag.content|default=''}',
+		        number: {$r_tag.flow_num|default='0'},
+		        sub_state: {$r_tag.follow|default='0'},
+				  },
+				{/volist}
+	{/notempty}
+  ];
+  <!--{/* 右侧订阅数据 */}-->
+
+
+
+    Vue.use(Toast, {})
+    let vm = new Vue({
+      el: '#findJob',
+      data:function() {
+        return {
+          search:{
+            industry_id:0,
+            city_id:0,
+            positionType_id:0,
+            position_id:0,
+          },
+          searchInputValue: '',
+          typeDetailState: 'false',
+          comChannelType: '全部',//渠道标签的单选框
+          tabsShow: true,
+          mySubscribeShow: true,//我的订阅的显示状态
+          myCollectShow: false,//我的收藏的显示状态
+          findJobListShow: true,
+          myFindJobShow: true,
+          subTagAlertEls: [],
+          urlHash: '',
+          subData: [],
+          leftSubIdChange: {},//左边订阅的数据
+          job_page: 1,
+          job_prevPage: 1,
+          scrollState: true,
+          notCompanyData: false,//空数据的显示
+          updataSubscribeState: false,//修改订阅的弹窗显示状态
+          subscribeState:false, //true为登录但未订阅
+          mySubContent: '',
+          userMessage: {
+            avaterurl: '{notempty  name="login_info.headimgurl"}{$login_info.headimgurl}{/notempty}',
+            name: '{notempty  name="login_info.nickname"}{$login_info.nickname}{/notempty}',
+            vip: '{notempty  name="login_info.user_level"}{$login_info.user_level}{/notempty}',
+
+            about: [
+              {
+                number: '0'+'个',
+                title: '我的订阅',
+                url: '/job/my.html?page=subscribe'
+              },
+              {
+                number: '0'+'个',
+                title: '我的收藏',
+                url: '/job/my.html?page=collect'
+              }
+            ]
+          },
+          loginState: false,
+
+
+		  <!-- {/* 行业类别 */}-->
+          subscribeIdustryData: [
+        	{id: 0,name: "不限"},
+        	{notempty  name="search.industry_list"}
+        		{volist name="search.industry_list" id="industry"}
+        		{id: {$industry.id},name: '{$industry.name}'},
+        		{/volist}
+        	{/notempty}
+          ],
+          <!-- {/* 行业类别 */}-->
+
+          <!-- {/* 工作城市 */}-->
+          cityData: [
+            {id: 0,name: "不限"},
+            {notempty  name="search.city_list"}
+            	{volist name="search.city_list" id="city"}
+            	  {id: {$city.id},name: '{$city.name}'},
+            	{/volist}
+            {/notempty}
+          ],
+          <!-- {/* 工作城市 */}-->
+
+
+          <!-- {/* 职位类别 */}-->
+          positionTypeData: [
+              {id: 0,name: "不限"},
+              {notempty  name="search.position_list"}
+              	{volist name="search.position_list" id="position"}
+              		{id: {$position.id},name: '{$position.name}'},
+              	{/volist}
+              {/notempty}
+            ],
+            <!-- {/* 职位类别 */}-->
+
+          companyList: [],
+          updataCompanyList: [],
+          sortModel: '1'//排序的value
+        }
+      },
+      watch: {
+        urlHash:function(newHash) {
+          this.searchCompanyList(newHash)
+        },
+        //监听订阅标签弹窗 点击外部关闭所有弹窗
+        subTagAlertEls:function() {
+          let _this = this
+          Vue.nextTick(function () {
+            document.onclick = function () {
+              _this.subTagAlertEls.forEach(function (el) {
+                if (el.style) {
+                  el.flag = false
+                  el.style.display = 'none'
+                }
+              })
+            }
+          })
+        },
+      },
+      methods: {
+        //ajax
+        //获取岗位列表
+        getCompanyList:function() {
+          let _this = this
+
+          post(getCompanyListUrl, {filter: '', page: 1}, function(res) {
+            if(res.code === 1){
+              _this.companyList = res.data.list
+
+              _this.companyList.forEach(function(item){
+                item.url = `/job/${item.company_id}.html`
+              })
+              if(_this.companyList.length === 0){
+                _this.notCompanyData = true
+              }else{
+                _this.notCompanyData = false
+              }
+
+              if(res.data.total_page > 1){
+                _this.job_page = 2
+                _this.job_prevPage = 1
+                _this.scrollState = true
+              }else{
+                _this.job_page = 1
+                _this.job_prevPage = 1,
+                _this.scrollState = false
+              }
+            }
+          }, function(res){
+            console.log(res)
+          })
+        },
+        //滚动加载岗位列表
+        scrollAddData:function(){
+          console.log('开始加载......')
+          let id = location.hash.split('#')[1]
+          let filter = id ? id : {}
+          let _this = this
+
+          if(_this.job_page > 1){
+
+            post(getCompanyListUrl, { filter: filter,page: _this.job_page }, function(res){
+              if(res.code == 1 && _this.job_prevPage != _this.job_page){
+                _this.companyList = _this.companyList.concat(res.data.list)
+                _this.job_prevPage = _this.job_page
+                res.data.total_page === res.data.page ? _this.scrollState = false : _this.scrollState = true
+              }
+              _this.job_page < res.data.total_page ? _this.job_page++ : ''
+            }, function(res){
+              console.log(res)
+            })
+          }
+        },
+        //查询岗位列表
+        searchCompanyList:function(newHash) {
+          let _this = this
+          let id = newHash.split('#')[1].split('!')
+          let filter = id.join('!')
+
+          post(getCompanyListUrl, { filter: filter, page: 1 }, function(res){
+            if(res.code == 1){
+              _this.companyList = res.data.list
+              if(_this.companyList.length === 0){
+                _this.notCompanyData = true
+              }else{
+                _this.notCompanyData = false
+
+              }
+              if(res.data.total_page > 1){
+                _this.job_page = 2
+                _this.job_prevPage = 1
+                _this.scrollState = true
+              }else{
+                _this.job_page = 1
+                _this.job_prevPage = 1
+                _this.scrollState = false
+              }
+            }
+          }, function(res){
+            console.log(res)
+          })
+        },
+        //修改该公司的收藏状态
+        _collectCompany:function(e, data) {
+          console.log(e)
+          let _this = this
+
+          if(this.loginState){
+            data.collectState ? data.collectState = 0 : data.collectState = 1
+            state = data.collectState
+            let num = ''
+            const my_collect_num_obj = ''
+            if (document.getElementById('my_collect_num') != null && document.getElementById('my_collect_num').length > 0) {
+              my_collect_num_obj = document.getElementById('my_collect_num')
+              let num = my_collect_num_obj.getAttribute('data-num')
+            }
+            post('/job/collect', { job_id: data.company_id, collect: state }, function(res){
+                if(res.msg == 'ok' && state == 1){
+                  _this.$toast('收藏成功', {
+                    iconType: 'success'
+                  })
+                  if (document.getElementById('my_collect_num') != null && document.getElementById('my_collect_num').length > 0) {
+                    num = parseInt(num)+1
+                    my_collect_num_obj.setAttribute('data-num',num)
+                    my_collect_num_obj.innerHTML = num+'个'
+                  }
+                }else if(res.msg == 'ok' && state == 0){
+                  _this.$toast('取消成功', {
+                    iconType: 'success'
+                  })
+                  if (document.getElementById('my_collect_num') != null && document.getElementById('my_collect_num').length > 0) {
+                    num = parseInt(num)-1
+                    my_collect_num_obj.setAttribute('data-num',num)
+                    my_collect_num_obj.innerHTML = num+'个'
+                  }
+                }else{
+                  _this.$toast('失败', {
+                    iconType: 'error'
+                  })
+                }
+              }, function(res){
+                console.log(res)
+              })
+          }else{
+            header._loginAlertShow()
+          }
+        },
+        useChildFn:function(){
+          console.log(this.$refs.findjobright)
+          this.$refs.findjobright._createSub_data();
+        },
+        _createSubItemId:function(index, id) {
+          this.createSubItemsId[index] = id
+        },
+        //修改求职列表左上方的类别显示（显示一行还是多行）
+        _typeDetailChange:function(e) {
+          let wrapper = e.target.parentNode.previousSibling.previousSibling
+          let state = e.target.parentNode.getAttribute('data-state')
+
+          if (state == 0) {
+            e.target.setAttribute('class', 'nc-icon nc-circle-bold-delete')
+            e.target.parentNode.setAttribute('class', 'addOrSubtract')
+            wrapper.style.height = 'auto'
+            e.target.parentNode.setAttribute('data-state', '1')
+          } else {
+            e.target.setAttribute('class', 'nc-icon nc-circle-bold-add')
+            e.target.parentNode.setAttribute('class', 'addOrSubtract')
+            wrapper.style.height = '44px'
+            e.target.parentNode.setAttribute('data-state', '0')
+          }
+        },
+        //初始化求职列表左上方的类别单选
+        _typeWrapperInit:function() {
+          let _this = this
+          Vue.nextTick(function () {
+            const items = document.querySelector('.typeWrapper').querySelectorAll('.item')
+            items.forEach(function (el, index) {
+
+              el.onclick = function () {
+                const otherNode = el.parentNode.children
+                for (let i of otherNode) {
+                  if (hasClass(i, 'active')) {
+                    removeClass(i, 'active')
+                  }
+                }
+
+                addClass(el, 'active')
+              }
+            })
+          })
+        },
+        //修改右边的选项卡
+        _createRightTabs:function(rightTabsCode) {
+          if (rightTabsCode) {
+            this.mySubscribeShow = false,
+              this.myCollectShow = true
+          } else {
+            this.mySubscribeShow = true,
+              this.myCollectShow = false
+          }
+        },
+
+        //搜索框的关闭按钮的显示状态修改
+        _comNameReset_btnState:function(type, e) {
+          let comNameReset = this.$refs.companyName_reset
+          if (type) {
+            comNameReset.style.display = ''
+          } else if (!type && e.target.value === '') {
+            comNameReset.style.display = 'none'
+          }
+        },
+        //url过滤
+        _urlFilter:function() {
+          let _this = this
+          Vue.nextTick(function () {
+            const hash = location.hash.split('#')[1]
+            let id = []
+
+            if (hash) {
+              id = hash.split('!')
+            }
+            console.log(id)
+
+            if (id.length === 7) {
+              _this.searchCompanyList(location.hash)
+
+              // _this.$refs.typeWrapper.querySelectorAll('.wrapper').forEach(function (wrapper, index) {
+              //   wrapper.querySelectorAll('.item').forEach(function (item) {
+              //     removeClass(item, 'active')
+              //     if (item.getAttribute('data-id') == id[index]) {
+              //       addClass(item, 'active')
+              //     }
+              //   })
+              // })
+              if (id[4] == 0) {
+                _this.comChannelType = '全部'
+              } else {
+                id[4] == 2 ? _this.comChannelType = '官方校招' : _this.comChannelType = '白熊内推'
+              }
+              _this.sortModel = id[5]
+              _this.searchInputValue = decodeURI(id[6])
+            } else {
+              location.hash = ''
+              _this.typeActiv_init()
+            }
+          })
+        },
+        //初始化求职列表的左上角类比的active
+        typeActiv_init:function() {
+          let _this = this
+          Vue.nextTick(function () {
+            const hash = location.hash.split('#')[1]
+            let id = []
+
+            if (hash) {
+              id = hash.split('!')
+              // _this.$refs.typeWrapper.querySelectorAll('.typeItem').forEach(function (el, i) {
+              //   addClass(el.querySelectorAll('.item')[id[i]], 'active')
+              // })
+            } else {
+              // _this.$refs.typeWrapper.querySelectorAll('.typeItem').forEach(function (el) {
+              //   addClass(el.querySelectorAll('.item')[0], 'active')
+              // })
+            }
+          })
+        },
+        changeHash:function(id, index) {
+          const hash = location.hash.split('#')[1]
+
+          if (!hash) {
+            let arr = '0!0!0!0!0!1!'.split('!')
+            arr[index] = id
+
+            location.hash = '#' + arr.join('!')
+          } else {
+            let arr = hash.split('!')
+            arr[index] = id
+
+            location.hash = '#' + arr.join('!')
+          }
+          this.urlHash = location.hash
+        },
+        comName_changeHash:function(value) {
+          let arr = '0!0!0!0!0!1!'.split('!')
+          arr[6] = value
+
+          location.hash = '#' + arr.join('!')
+          this.urlHash = location.hash
+        },
+        typeReset:function() {
+          // this.$refs.typeWrapper.querySelectorAll('.wrapper').forEach(function (wrapper) {
+          //   wrapper.querySelectorAll('.item').forEach(function (item) {
+          //     removeClass(item, 'active')
+          //   })
+          //   addClass(wrapper.querySelectorAll('.item')[0], 'active')
+          // })
+          this.comChannelType = '全部'
+          // document.querySelector('.sortSelect .ivu-select-selected-value').innerHTML = '按照热门程度排序'
+          this.sortModel = '1'
+        },
+        //点击关闭按钮，重置输入框的值
+        companyName_reset:function(e) {
+          let element = e.target.parentNode.parentNode.children[0].querySelector('input')
+
+          element.value = ''
+          this.searchInputValue = ''
+          this.$refs.companyName_reset.style.display = 'none'
+        },
+        //筛选id
+        companyName_search:function(e) {
+          let value = e.target.parentNode.parentNode.querySelector('input').value
+
+          this.comName_changeHash(value)
+          this.typeReset()
+        },
+        industry_id:function(id) {
+          this.search.industry_id = id
+          this.changeHash(id, 0)
+        },
+        city_id:function(id) {
+          this.search.city_id = id
+          this.changeHash(id, 1)
+        },
+        positionType_id:function(id) {
+          this.search.positionType_id = id
+          this.changeHash(id, 2)
+        },
+        position_id:function(id) {
+          this.search.position_id = id
+          this.changeHash(id, 3)
+        },
+        jobType_id:function(label) {
+          let id = 0
+          if (label === '全部') {
+            id = 0
+          } else if (label === '官方校招') {
+            id = 2
+          } else {
+            id = 1
+          }
+          this.changeHash(id, 4)
+        },
+        sortType_id:function(id) {
+          this.changeHash(id, 5)
+        },
+        //设置显示求职列表左上角的+号
+        _addIconState:function() {
+          let _this = this
+          Vue.nextTick(function () {
+            let typeWrapper = _this.$refs.typeWrapper
+            let wrapperWidth = typeWrapper.querySelectorAll('.wrapper')[0].clientWidth
+
+            // typeWrapper.querySelectorAll('.wrapper').forEach(function (el) {
+            //   let itemsWidth = 0
+            //   let addOrSubtract = el.parentNode.querySelector('.addOrSubtract')
+
+            //   el.querySelectorAll('.item').forEach(function (item) {
+            //     itemsWidth += item.clientWidth + 5
+            //   })
+            //   if (itemsWidth > wrapperWidth) {
+            //     addOrSubtract.style.display = ''
+            //   } else {
+            //     addOrSubtract.style.display = 'none'
+            //   }
+            // })
+            let obj = typeWrapper.querySelectorAll('.wrapper')
+            for (var i = 0; i < obj.length; i++) {
+
+              let itemsWidth = 0
+              let addOrSubtract = obj[i].parentNode.querySelector('.addOrSubtract')
+              let subobj = obj[i].querySelectorAll('.item')
+              for (var j = 0; j < subobj.length; j++) {
+
+                itemsWidth += subobj[j].clientWidth + 5
+              }
+              // obj[i].querySelectorAll('.item').forEach(function (item) {
+              //   itemsWidth += item.clientWidth + 5
+              // })
+              if (itemsWidth > wrapperWidth) {
+                addOrSubtract.style.display = ''
+              } else {
+                addOrSubtract.style.display = 'none'
+              }
+            }
+            // typeWrapper.querySelectorAll('.wrapper').forEach(function (el) {
+            //   let itemsWidth = 0
+            //   let addOrSubtract = el.parentNode.querySelector('.addOrSubtract')
+
+            //   el.querySelectorAll('.item').forEach(function (item) {
+            //     itemsWidth += item.clientWidth + 5
+            //   })
+            //   if (itemsWidth > wrapperWidth) {
+            //     addOrSubtract.style.display = ''
+            //   } else {
+            //     addOrSubtract.style.display = 'none'
+            //   }
+            // })
+          })
+        },
+        //初始化订阅弹窗的多选和单选
+        _subscribeAlertInit:function() {
+          let _this = this
+
+          Vue.nextTick(function () {
+            for (let i = 0; i < 2; i++) {
+              let element = document.querySelectorAll('.subscribeItem')[i].querySelectorAll('li')[0]
+              addClass(element, 'unlimited active')
+            }
+
+            const items = document.querySelectorAll('.subscribeItem')
+
+            items.forEach(function (el) {
+
+              if (!hasClass(el, 'radio')) {
+                let unlimitedItem = Object
+                let otherItems = []
+
+                el.querySelectorAll('li').forEach(function (elItem) {
+                  if (hasClass(elItem, 'unlimited')) {
+                    unlimitedItem = elItem
+                  } else {
+                    otherItems.push(elItem)
+                  }
+                })
+
+                unlimitedItem.onclick = function () {
+                  otherItems.forEach(function (otherItem) {
+                    addClass(unlimitedItem, 'active')
+                    removeClass(otherItem, 'active')
+                  })
+                }
+
+                otherItems.forEach(function (otherItem) {
+                  otherItem.onclick = function () {
+                    addClass(otherItem, 'active')
+                    removeClass(unlimitedItem, 'active')
+                  }
+                })
+              } else {
+                el.querySelectorAll('.item').forEach(function (item) {
+                  item.querySelectorAll('li').forEach(function (li) {
+                    let lis = li.parentNode.children
+                    li.onclick = function () {
+                      for (let i of lis) {
+                        removeClass(i, 'active')
+                      }
+                      addClass(li, 'active')
+                    }
+                  })
+                })
+              }
+            })
+          })
+        },
+        _nearSubAlertEl:function(nearAlert) {
+          if (nearAlert.flag == true) {
+            this.subTagAlertEls.push(nearAlert)
+          } else if (nearAlert.flag == false) {
+            this.subTagAlertEls.pop(nearAlert)
+          }
+
+        },
+        //从订阅标签获取订阅修改
+        updataSubData:function(id, follow){
+          this.leftSubIdChange = {
+            id: id,
+            follow: follow
+          }
+        },
+        // 从修改订阅组件获取组件的显示状态
+        getSubState:function(state){
+          this.updataSubscribeState = state
+        },
+        //从findjobRight组件获取组件的状态
+        getSubscribeStatus:function(state){
+          console.log(state)
+          this.subscribeState = state
+        },
+        //从findjobRight组件获取组件的显示状态
+        openUpdataSub:function(state){
+          console.log(state)
+          this.updataSubscribeState = state
+        },
+        get_mySubContent:function(newContent){
+          this.mySubContent = newContent
+        },
+        // 判断是否需要urlFilter
+        not_urlFilter:function(){
+          let length = location.hash.split('!').length
+
+          if(length < 7){
+            this.getCompanyList()
+          }
+        },
+        //未登录弹出登录窗口
+        notlogin:function(){
+          if(this.loginState){
+            return
+          }else{
+            header._loginAlertShow()
+          }
+        }
+
+
+      },
+      created:function() {
+        this._urlFilter()
+        this.not_urlFilter()
+
+        if(Vue.prototype.global.getCookie('session_login_token') == 1){
+          this.loginState = true
+        }else{
+          this.loginState = false
+        }
+
+        this.subData = global_subData
+      },
+      mounted:function() {
+        //this._typeWrapperInit()
+        this._addIconState()
+      },
+      components: {
+        'findjob-right': findJobRight,
+        'ice-alert': iceAlert,
+        'sub-tag': subTag,
+        'scroll': scroll,
+        'updatasub-alert': updataSubAlert,
+        'user-window': userWindow
+      }
+    })
+  </script>
+{/block}

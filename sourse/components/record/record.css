@@ -1,0 +1,85 @@
+.ice_record {
+  width: 100%; }
+  .ice_record .section {
+    width: 1000px;
+    margin: 0 auto; }
+    .ice_record .section .recTime {
+      font-size: 15px;
+      margin-right: 10px; }
+    .ice_record .section .start-btn, .ice_record .section .stop-btn {
+      font-size: 50px; }
+    .ice_record .section .start-btn {
+      color: #d8d8d8; }
+    .ice_record .section .active {
+      color: #482929; }
+    .ice_record .section .close-btn, .ice_record .section .reset-btn {
+      width: 50px;
+      line-height: 50px;
+      display: inline-block;
+      border-radius: 50%;
+      background-color: #482929;
+      font-size: 14px;
+      color: #fff;
+      text-align: center; }
+    .ice_record .section .reset-btn {
+      background-color: var(--main-color);
+      color: #482929; }
+    .ice_record .section .recordingslist {
+      font-size: 14px; }
+    .ice_record .section .audioFinish {
+      width: 300px;
+      display: inline-block; }
+
+.player {
+  width: 100%;
+  padding: 0 10px;
+  line-height: 40px;
+  background-color: #eee;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; }
+  .player .playIcon {
+    margin-right: 0;
+    flex: 0 0 20px;
+    position: relative;
+    top: -2px; }
+  .player .time {
+    font-size: 14px;
+    flex: 0 0 50px;
+    text-align: right; }
+  .player .progress-bar {
+    display: inline-block;
+    flex: 1; }
+    .player .progress-bar .bar-inner {
+      position: relative;
+      width: 100%;
+      left: 15px;
+      height: 4px;
+      background: rgba(0, 0, 0, 0.1); }
+      .player .progress-bar .bar-inner .progress {
+        position: absolute;
+        height: 100%;
+        background: #482929; }
+      .player .progress-bar .bar-inner .timeBuffered {
+        position: absolute;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.1); }
+      .player .progress-bar .bar-inner .progress-btn-wrapper {
+        position: absolute;
+        left: -8px;
+        top: -13px;
+        width: 30px;
+        height: 30px; }
+        .player .progress-bar .bar-inner .progress-btn-wrapper .progress-btn {
+          position: relative;
+          top: 7px;
+          left: 7px;
+          box-sizing: border-box;
+          width: 2px;
+          height: 16px;
+          border: 3px solid #fff;
+          /* border-radius: 50%; */
+          background: #2E8CF1; }
+
+/*# sourceMappingURL=record.css.map */

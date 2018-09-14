@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{$title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="/static/plugin/swiper-4.0.7/css/swiper.min.css">
+    <link rel="stylesheet" type="text/css" href="__{SRC}__/plugin/iview/styles/iview.css">
+    <link rel="stylesheet" type="text/css" href="__{SRC}__/css/iconstyle.css">
+    <link rel="stylesheet" type="text/css" href="./sourse/live/css/live.css">
+    <!-- <script src="/static/js/player.js"></script> -->
+    <!-- <script src="__{SRC}__/components/player/player.js"></script> -->
+    <script src="__{SRC}__/components/liveTimer/liveTimer.js"></script>
+    <script src="/static/plugin/vue/vue.min.js"></script>
+    <script src="/static/plugin/iview/iview.js"></script>
+    <script src="/static/plugin/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/static/plugin/swiper-4.0.7/js/swiper.min.js"></script>
+    <script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+    <script type="text/javascript" src="//g.alicdn.com/tb/apush/1.0.16/??socketio.js,apush.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/imageviewer/0.6.0/viewer.css">
+    <script type="text/javascript" src="//cdn.bootcss.com/imageviewer/0.6.0/viewer.js"></script>
+</head>
+<body>
+    <div id="app" class="flex full-body live-container">
+        <div class="text-live-container">
+            <div class="text-live-item" v-for="(item,index) in textLiveData" v-if="item.status">
+                <p class="header-num">{{parseInt(index)+1}}</p>
+                <p class="item-question" v-html="item.ask_content"></p>
+                <p class="item-answer" :class="{'multi-ellipsis':!item.opened && item.answer_content.length >50}" v-html="item.answer_content"></p>
+                <span class="btn-open" @click="toggleTextLiveItem" :data-index="index" v-if="!item.opened && item.answer_content.length >50">{{item.opened?'点击收起':'点击展开'}}</span>
+            </div>
+            <div class="live-copy-right">©2018 icebear</div>
+        </div>
+
+        <input type="hidden" id="live_room_id" name="live_room_id" value="{$live_room_id}">
+    </div>
+    <script type="text/javascript" src="./sourse/live/js/autoplayer.js"></script>
+    <script type="text/javascript" src="./sourse/live/js/network.js"></script>
+    <script type="text/javascript" src="./sourse/live/js/live.js"></script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <title>{block name="page_title"}{$__GLOBAL__.PAGE_TITLE|default='白熊求职'}{/block}</title>
+  <meta name="description" content="{$page_description|default='白熊求职'}">
+	<meta name="keyword" content="{$page_keyword|default='白熊求助助手，网申助手，应届生求职，应届生网申，求职攻略，网申简历'}">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport"  content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" >
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="format-detection" content="email=no">
+	<meta name="theme-color" content="#ffffff">
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+	<link rel="manifest" href="/manifest.json">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#482929">
+	<link rel="stylesheet" href="//cdn.bootcss.com/iview/2.7.4/styles/iview.css">
+  <link rel="stylesheet" href="__{SRC}__/css/iconstyle.css?v=0.1">
+	<link rel="stylesheet" href="./sourse/css/app.css?v=0.1">
+	{block name="head"}{/block}
+	</head>
+<body   {block name="body_html_tag"}{/block} >
+
+<!--
+	<div>
+	   <a href="{:url('/academy')}">学院 &nbsp;|&nbsp;&nbsp; </a>
+	   <a href="{:url('/job')}">求职&nbsp;|&nbsp;&nbsp;</a>
+	   &nbsp;&nbsp;&nbsp;
+	   <a href="{:url('/login')}">登录&nbsp;|&nbsp;&nbsp;</a>&nbsp;
+	   <a href="{:url('/login_debug')}" >模拟账户登录&nbsp;|&nbsp;&nbsp;</a>&nbsp;
+	   <a href="{:url('/logout')}"  >退出&nbsp;|&nbsp;&nbsp;</a>
+
+	   &nbsp;&nbsp;&nbsp;
+	   <a href="{:url('/my_academy')}">我的课程&nbsp;|&nbsp;&nbsp;</a>
+	   <a href="{:url('/my_message')}">我的消息&nbsp;|&nbsp;&nbsp;</a>
+	   &nbsp;
+	   <a href="{:url('/my_course')}">个人中心-我的课程&nbsp;|&nbsp;&nbsp;</a>
+	   <a href="{:url('/my_order')}">个人中心-我的订单&nbsp;|&nbsp;&nbsp;</a>
+	   <a href="{:url('/my_preference')}">个人中心-我的设置&nbsp;&nbsp;&nbsp;</a>
+  </div>
+ -->
+
+<div class="ic-wrap">
+    <div class="ic-main">
+    <div id="header">
+      <div class="tip_for_ie" :style="{ 'display': global.isIe ? 'block' : 'none' }">为了可以正常使用白熊求职，我们推荐你使用 Chrome 、火狐等浏览器。<i @click="global.isIe=false" class="nc-icon nc-simple-remove m-l-5 ft12"></i></div>
+
+      <!-- {/*公用头部*/} -->
+      <header>
+          <div class="container">
+              <div class="header-logo"><a href="/"><img src="__{SRC}__/images/logo.png" data-rjs="2"></a></div>
+              <nav class="header-nav">
+                <a href="{:url('/')}" class="{eq name="top_bar_nav"  value="Index"}active{/eq}">首页</a>
+                <a href="{:url('/academy')}" class="{eq name="top_bar_nav"  value="Academy"}active{/eq}">学院</a>
+                 <a href="{:url('/job')}" class="{eq name="top_bar_nav"  value="Job"}active{/eq}">求职</a>
+              </nav>
+
+              <!-- {/*用户已登录*/} -->
+              <div v-show="global.loginStatus" style="display: none;">
+                <div class="header-right">
+                  {notempty name='member'}
+                    {if condition ='$member.user_system_role eq "TEACHER" or $member.user_system_role eq "TEAM" or $member.user_system_role eq "BOSS"'}
+                    <a href="{:url('/teacher/index')}" class="header-item btn-circle w120 btn-secondary">我的课程</a>
+                    {else}
+                    <a href="/my_academy.html" class="header-item btn-circle w120 btn-secondary">我的课程</a>
+                    {/if}
+                  {/notempty}
+
+                  <a class="header-item" @click.stop="_messageBoxShow">
+                    <i class="nc-icon nc-bell-55"></i>
+                    <span class="red_dot" v-show="unreadMessState"></span>
+                  </a>
+                </div>
+                <div class="header-head" @click.stop="_centerBoxShow">
+                  <img src="{notempty name="member" }{$member.headimgurl}{/notempty}" class="user-head">
+                </div>
+              </div>
+              <!-- {/*用户已登录*/} -->
+
+              <!-- {/*用户未登录*/} -->
+              <div class="header-notlogin" v-show="!global.loginStatus" style="display: none;">
+                <a @click.stop="_loginAlertShow" href="javascript:void(0)" class="btn-circle w120 btn-secondary">登录/注册</a>
+              </div>
+              <!-- {/*用户未登录*/} -->
+
+              <!-- {/*消息通知弹出框*/} -->
+              <transition name="fade">
+                <div class="message-box"  v-show="headerMsgeBox" style="display:none" @click.stop="">
+                  <div class="main"><span class="title">通知</span></div>
+                  <div class="message-box-body sm-scrollbar" @scroll="messageScroll">
+                    <ul class="content" v-if="message.length > 0" >
+                      <a v-for="(i, index) in message" class="item" :class="{ active: i.is_read != 1 }" :href="i.msg_type === 'job_remind' ? '/job/my#new!0!1' : 'javascript:void(0)'" @click='readMessage(i.mid, $event)' style="width: 100%; display:inline-block;">
+                        <img class="avater" :src="i.sender_avatar"
+                        alt="">
+                        <span class="name">{{ i.sender_name }}</span>
+                        <span class="detail">{{ i.title }}：{{ i.content }}</span>
+                      </a>
+                    </ul>
+                    <div class="h100 v-flex-center text-grey ft14" v-else>
+                      <p>暂无消息</p>
+                    </div>
+
+                    <span class="scroll_moreText" v-show="moreTextState"><i class="icon nc-icon nc-dots-05-2"></i>查看更多</span>
+                  </div>
+
+                  <div class="footer">
+                      <span class="set"><a href="{:url('/my_preference')}">设置</a></span>
+                      <span class="seeAll"><a href="{:url('/my_message')}">查看全部通知</a></span>
+                  </div>
+                </div>
+              </transition>
+              <!-- {/*消息通知弹出框*/} -->
+
+              <!-- {/*个人中心弹窗 */} -->
+              <transition name="fade">
+                <div class="center-box"  v-show="headerCenterBox" style="display:none" @click.stop="_centerBoxShow">
+                  <a href="{:url('/job/my')}"><i class="nc-icon nc-bookmark-2-2"></i>我的求职</a>
+                  <a href="{:url('/my_order')}"><i class="nc-icon nc-tablet-reader-42-2"></i>我的订单</a>
+                  <a href="{:url('/my_preference')}"><i class="nc-icon nc-pencil-2"></i>个人中心</a>
+                  <!-- <a href="{:url('/my_order')}"><i class="nc-icon nc-ruler-pencil-2"></i>我的简历</a> -->
+                  <a href="{:url('/logout')}"><i class="nc-icon nc-button-power"></i>登出</a>
+                </div>
+              </transition>
+              <!-- {/*个人中心弹窗 */} -->
+          </div>
+
+          <!-- {/*登录弹出框*/} -->
+          <transition name="fade">
+            <div class="modal" v-show="global.loginAlertShow" style="display:none">
+              <div class="loginAlert" @click.stop="">
+                <a @click="_loginAlertHide" href="javascript:void(0)">
+                  <Icon type="close-round" class="btn-close"></Icon>
+                </a>
+                <img class="weixinImg" :src="global.loginCodeImg" alt="">
+                <p class="about">微信扫码关注「白熊小助手」</p>
+                <p class="about">进行登录/注册</p>
+              </div>
+            </div>
+          </transition>
+          <!-- {/*登录弹出框*/} -->
+
+          <!-- {/*注册弹出框 */} -->
+          <transition name="fade">
+            <div class="modal" v-show="global.registerAlertShow" style="display:none">
+              <div class="registerAlert" @click.stop="" v-show="!global.phoneBindAlertShow">
+                <a @click="_registerAlertHide" href="javascript:void(0)">
+                  <Icon type="close-round" class="btn-close"></Icon>
+                </a>
+                <div class="reg_header">
+                  <img class="reg_header_head" :src="global.userMessage.headimgurl">
+                  <div class="reg_header_welcome">
+                    <p>你好，<span>{{global.userMessage.nickname}}</span><br/>还差一步完成登录：</p>
+                  </div>
+                </div>
+                <div class="reg_body">
+                    <p class="title">绑定/创建白熊账号</p>
+                    <form @submit.prevent="global.regsubmit" method="POST" id="regForm">
+                      <input type="hidden"  id="token" v-model="global.reg.token" :value="global.loginToken" />
+                      <div class="phone_number">
+                        <i-input placeholder="手机号" class="number" v-model="global.reg.phone" :value="global.reg.phone" @change="inputChange"></i-input>
+                        <input style="display: none;" type="text" id="countryCode" class="country-code" v-model="global.reg.country_code" :value="global.reg.country_code" @change="inputChange">
+                      </div>
+                      <div class="group">
+                        <i-input placeholder="验证码" class="verifyCode" v-model="global.reg.sms_code" name="sms_code" @change="inputChange"></i-input>
+                        <i-button @click.prevent="global.regGetCode" class="btn-getCode"  :disabled="!global.reg.sendCode.status">{{global.reg.sendCode.text}}</i-button>
+                      </div>
+                      <input class="btn-circle btn-secondary btn-md full-wd" type="submit" value="确认" />
+                      <span class="text-error">{{global.reg.error}}</span>
+                    </form>
+                </div>
+              </div>
+              <div class="registerAlert contact" v-show="global.phoneBindAlertShow" style="display:none">
+                <a @click="_registerAlertHide" href="javascript:void(0)">
+                  <Icon type="close-round" class="btn-close"></Icon>
+                </a>
+                <div class="reg_title">
+                  该手机号已绑定其他微信号，如需更换账号请联系微信客服「白熊君」。
+                </div>
+                <div class="reg_body">
+                    <img data-rjs="2" src="__{SRC}__/images/qr/service-code.png" alt="客服二维码">
+                </div>
+              </div>
+            </div>
+          </transition>
+          <!-- {/*注册弹出框 */} -->
+      </header>
+      <!-- {/*公用头部*/} -->
+    </div>
+    <!-- {/*网页内顶部导航*/} -->
+    {block name="body_header"}{/block}
+    <!-- {/*网页内顶部导航*/} -->
+
+    <!-- {/* 页面主体 start */} -->
+    {block name="content_body"}主内容{/block}
+    <!-- {/* 页面主体 end */} -->
+
+    <!-- 公用底部 -->
+    </div>
+  </div>
+
+
+<!-- {/* 页面公用尾部 */} -->
+<footer id="footer" v-show="true" style="display: none">
+  <!-- <div class="ivu-back-top" :class="globalScrollTop? 'ivu-back-top-show':''">
+    <div class="ivu-back-top-inner" @click="clickScrollTop"><i class="ivu-icon ivu-icon-chevron-up"></i></div>
+  </div> -->
+
+  <div class="container">
+    <scroll-top :status="globalScrollTop" :service-button-img="serviceButtonImg" :service-content-img="serviceContentImg" :scroll-top-img="scrollTopImg"></scroll-top>
+    <ul class="copyright"><li>©2018 icebear</li><li>粤ICP备15039433号-1</li></ul>
+    <ul class="pull-right">
+      <li class="footer-corporation">
+          <Poptip trigger="hover" placement="top" width="246">
+          <Button >商务合作</Button>
+          <div slot="content">
+            <img src="__{SRC}__/images/qr/footer-corporation.png" data-rjs="2">
+          </div>
+          </Poptip>
+      </li>
+      <li><a href="https://www.lagou.com/gongsi/103271.html" target="_blank">加入我们</a></li>
+    </ul>
+  </div>
+</footer>
+<!-- {/* 页面公用尾部 */} -->
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MFPVTLC"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MFPVTLC');</script>
+<!-- End Google Tag Manager -->
+
+<script src="//cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/iview/2.7.4/iview.js"></script>
+<script src="//cdn.bootcss.com/intl-tel-input/12.1.6/js/intlTelInput.js"></script>
+<script src="//cdn.bootcss.com/retina.js/2.1.3/retina.min.js"></script>
+<script src="./sourse/js/components.js"></script>
+<script src="./sourse/js/ice_tools.js"></script>
+<script src="./sourse/js/app.js"></script>
+{block name="footer_js"}{/block}
+</body>
+</html>

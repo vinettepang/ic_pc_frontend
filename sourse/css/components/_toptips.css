@@ -1,0 +1,2 @@
+.ic-toptips{font-size:12px;position:fixed;z-index:1010;width:100%;top:0;left:0;pointer-events:none}.ic-toptips .ic-toptips-notice{padding:0;overflow:hidden;text-align:center;transition:height .3s ease-in-out,padding .3s ease-in-out}.ic-toptips .ic-toptips-notice-content{display:inline-block;padding:0;width:100%;height:60px;line-height:60px;color:#fff;font-size:18px;border-radius:0;background-color:#9085e7;pointer-events:all;box-shadow:0 1px 6px rgba(0,0,0,0.2);position:relative}
+/*# sourceMappingURL=_toptips.css.map */

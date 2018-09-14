@@ -1,0 +1,91 @@
+#ice_carousel{
+	width: 100%;
+	height: 300px;
+	min-width: 1000px;
+	cursor: pointer;
+	.carousel_list{
+		width: 100%;
+		height: 300px;
+		position: relative;
+		.carousel_item{
+			width: 100%;
+			height: 100%;
+			text-align: center;
+			position: absolute;
+			top: 0;
+			left: 0;
+			opacity: 0;
+			transition: opacity 1s ease-in;
+			.item_img{
+				width: 1000px;
+				height: 300px;
+				opacity: 0;
+				transition: opacity 1s ease-in;
+			}
+			.img_active{
+				opacity: 1;
+			}
+		}
+		.active{
+			opacity: 1;
+		}
+		
+		.dot_wrapper{
+			position: absolute;
+			bottom: 6px;
+			left: 50%;
+			transform: translate(-50%, 0);
+			.dot_box{
+				width: 16px;
+				height: 16px;
+				margin: 0 3px;
+				display: inline-flex;
+				align-items: center;
+				cursor: pointer;
+			}
+			.box_active{
+				width: 24px;
+			}
+			.dot{
+				width: 16px;
+				height: 3px;
+				display: inline-block;
+				background-color: #482929;
+				opacity: 0.3;
+			}
+			.active{
+				width: 24px;
+				background-color: #482929;
+			}
+		}
+		.prev, .next{
+			width: 30px;
+			height: 30px;
+			position: absolute;
+			top: 50%;
+			transform: translate(0, -50%);
+			display: inline-block;
+			font-size: 30px;
+			opacity: 0.3;
+			z-index: 200;
+		}
+		.prev{
+			left: 30px;
+		}
+		.next{
+			right: 30px;
+		}
+	}
+	.carousel1-enter-active, .carousel1-leave-active{
+		transition: all 1s ease-in 0s;
+	}
+	.carousel1-enter, .carousel1-leave{
+		opacity: 0.2;
+	}
+	.prevOrNext_state-enter-active, .prevOrNext_state-leave-active{
+		transition: all .5s ease-in 0s;
+	}
+	.prevOrNext_state-enter, .prevOrNext_state-leave-to{
+		opacity: 0.2;
+	}
+}

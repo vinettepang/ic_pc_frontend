@@ -1,0 +1,91 @@
+$body-background: #faf8f6;
+
+// Type
+$font-url: null;
+$font-family-body: "Microsoft YaHei","PingFang","Helvetica Neue","微軟正黑體","Helvetica Neue","Arial","sans-serif";
+$font-family-heading: $font-family-body;
+$font-size-body: 100%;
+$font-size-small: $font-size-body*0.8;
+$font-size-large: $font-size-body*1.2;
+
+// Colors
+$font-color:#222;
+$pri-color: #482929; //brown
+$sec-color: #ffcc2d; //yellow
+$link-color: #482929; //brown
+$text-color: #482929; //brown
+$green-color:#82b547; //green
+$purple-color: #9085e7; //taro
+$whitegreen-color:#cadfb1; //white green
+$orange-color:#ff801a; //orange
+$orange-btn-color:#ff982e; //orange
+$lightpurple-color:#e4e1fa; //lightpurple
+$lightyellow-color:#d8a400;
+$little-grey-color:#faf8f6;
+$grey-color:#7e7e7e;
+$half-grey-color:#949494;
+$dark-grey-color:#9b9b9b;
+$taro-color: #6769C9;
+$pink-color: #F4475C;
+
+$purple-dark-color:#554d93;
+$green-dark-color:#568a1b;
+$orange-dark-color:#eb8021;
+// $skyblue-color:#5b93e7;
+// $darkblue-color:#4c6ba9;
+// $grass-color:#5e8333;
+// $coffee-color:#B89D86;
+// $wgreen-color:#5cb947;
+// $whitebrown-color:#90531d;
+$darkengrey-color:#747474; //darkengrey
+$text-grey-color :#7d7d7d; //grey
+$text-dark-color :#4a4a4a; //grey
+$brown-color:#6f3400;
+
+$text-primary-color: #428bca; //dark blue
+$text-secondary-color: #42c9c4; //green blue
+$text-success-color: #56cc3a; //green
+$text-emphasis-color: #f84e4a; //red
+$text-warning-color: #fbb040; //orange
+$text-error-color: #f84e4a;
+$text-white-color: #fff;
+
+$btn-whiteyellow-color:#fceb9e; //white yellow
+$btn-green-color:#82b547;
+$btn-blue-color: #4a90e2;
+// Components - Buttons
+$btn-radius: 2px;
+$btn-circle-radius: 20px;
+$btn-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.125) inset;
+$btn-default-padding: 6px 12px;
+
+$btn-circle-padding: 7px 25px;
+$btn-circle-padding-md: 0 18px;
+$btn-default-font-size: 14px;
+$btn-md-font-size: 16px;
+$btn-md-font-size: 16px;
+$btn-sm-padding: 3px 10px;
+$btn-sm-font-size: 12px;
+$btn-lg-padding: 12px 73px;
+$btn-lg-font-size: 16px;
+$btn-default-color: #333;
+$btn-default-border: 1px solid #dedede;
+$btn-default-background: #fff;
+$btn-pri-color: $text-color;
+$btn-pri-background: $pri-color;
+$btn-pri-border: 1px solid darken($btn-pri-background, 5%);
+$btn-sec-color: $text-color;
+$btn-sec-background: $sec-color;
+$btn-sec-border: 1px solid darken($btn-sec-background, 5%);
+$btn-disabled-color: #fff;
+$btn-disabled-background: #9b9b9b;
+$btn-disabled-border: 1px solid darken($btn-disabled-background, 5%);
+
+// Components - Table
+$tb-cell-padding: 8px;
+$tb-border-color: #cecece;
+$tb-background: #fff;
+$tb-striped-background: #f2f2f2;
+$tb-hover-background: #f5f5f5;
+
+$import-animations: ('all');

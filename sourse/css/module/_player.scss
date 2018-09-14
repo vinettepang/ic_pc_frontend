@@ -1,0 +1,71 @@
+.player {
+    width: 100%;
+    padding: 0 10px;
+    line-height: 34px;
+    background-color: #9085e7;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    color: #fff;
+    position: relative;
+    a {
+        display: inline-flex;
+        .ivu-icon {
+            font-size: 20px;
+            flex: 0 0 20px;
+            display: inline-flex;
+            color: #fff;
+        }
+    }
+    .time {
+        flex: 0 0 50px;
+        text-align: right;
+    }
+    .progress-bar {
+        display: inline-block;
+        flex: 1;
+        .bar-inner {
+            position: relative;
+            width: 100%;
+            left: 12px;
+            height: 2px; //background: rgba(0, 0, 0, 0.1);
+            background: #fff;
+            .progress {
+                position: absolute;
+                height: 100%;
+                background: #fff;
+            }
+            .timeBuffered {
+                position: absolute;
+                height: 100%;
+                background: #fff;
+            }
+            .progress-btn-wrapper {
+                position: absolute;
+                left: -8px;
+                top: -13px;
+                width: 30px;
+                height: 30px;
+                .progress-btn {
+                    position: relative;
+                    top: 8px;
+                    left: 7px;
+                    box-sizing: border-box;
+                    width: 2px;
+                    height: 12px;
+                    border: none;
+                    background: #fff;
+                }
+            }
+        }
+    }
+    .playState {
+        width: 20px;
+        line-height: 40px;
+        position: absolute;
+        right: -27px;
+        top: 0;
+        color: #482929;
+    }
+}

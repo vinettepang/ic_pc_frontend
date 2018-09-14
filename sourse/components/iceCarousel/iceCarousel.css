@@ -1,0 +1,74 @@
+#ice_carousel {
+  width: 100%;
+  height: 300px;
+  min-width: 1000px;
+  cursor: pointer; }
+  #ice_carousel .carousel_list {
+    width: 100%;
+    height: 300px;
+    position: relative; }
+    #ice_carousel .carousel_list .carousel_item {
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 1s ease-in; }
+      #ice_carousel .carousel_list .carousel_item .item_img {
+        width: 1000px;
+        height: 300px;
+        opacity: 0;
+        transition: opacity 1s ease-in; }
+      #ice_carousel .carousel_list .carousel_item .img_active {
+        opacity: 1; }
+    #ice_carousel .carousel_list .active {
+      opacity: 1; }
+    #ice_carousel .carousel_list .dot_wrapper {
+      position: absolute;
+      bottom: 6px;
+      left: 50%;
+      transform: translate(-50%, 0); }
+      #ice_carousel .carousel_list .dot_wrapper .dot_box {
+        width: 16px;
+        height: 16px;
+        margin: 0 3px;
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer; }
+      #ice_carousel .carousel_list .dot_wrapper .box_active {
+        width: 24px; }
+      #ice_carousel .carousel_list .dot_wrapper .dot {
+        width: 16px;
+        height: 3px;
+        display: inline-block;
+        background-color: #482929;
+        opacity: 0.3; }
+      #ice_carousel .carousel_list .dot_wrapper .active {
+        width: 24px;
+        background-color: #482929; }
+    #ice_carousel .carousel_list .prev, #ice_carousel .carousel_list .next {
+      width: 30px;
+      height: 30px;
+      position: absolute;
+      top: 50%;
+      transform: translate(0, -50%);
+      display: inline-block;
+      font-size: 30px;
+      opacity: 0.3;
+      z-index: 200; }
+    #ice_carousel .carousel_list .prev {
+      left: 30px; }
+    #ice_carousel .carousel_list .next {
+      right: 30px; }
+  #ice_carousel .carousel1-enter-active, #ice_carousel .carousel1-leave-active {
+    transition: all 1s ease-in 0s; }
+  #ice_carousel .carousel1-enter, #ice_carousel .carousel1-leave {
+    opacity: 0.2; }
+  #ice_carousel .prevOrNext_state-enter-active, #ice_carousel .prevOrNext_state-leave-active {
+    transition: all .5s ease-in 0s; }
+  #ice_carousel .prevOrNext_state-enter, #ice_carousel .prevOrNext_state-leave-to {
+    opacity: 0.2; }
+
+/*# sourceMappingURL=iceCarousel.css.map */

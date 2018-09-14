@@ -1,0 +1,1115 @@
+@charset "utf-8";
+
+body{
+  height: auto;
+}
+i.nc-icon{
+  margin-right: 0;
+}
+#findJob{
+  .section{
+    width: 100%;
+    .secHeader{
+      text-align:center;
+      width: 100%;
+      line-height: 46px;
+      background-color: $sec-color;
+      margin-bottom: 20px;
+      .secHeader_nav{
+        width: 640px;
+        margin: 0 auto;
+      }
+      .findJob_nav{
+        // width: 49%;
+        position: relative;
+        display: inline-block;
+        font-size: 16px;
+        text-align: center;
+        margin-right:312px;
+        &:last-child{margin-right:0;}
+        &.active{
+          font-weight:bold;
+          &:before{
+            content: '';
+            width: 0;
+            height: 0;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid #faf8f6;
+            border-left: 10px solid transparent;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, 0);
+          }
+        }
+      }
+    }
+    .findJob-list{
+      width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      .left{
+        width: 660px;
+        .companyName_reset .nc-simple-remove{
+          position: relative;
+          top: -45px;
+          left: -115px;
+          float: right;
+          opacity: 0.5;
+          z-index: 2;
+        }
+        .search-input{
+          width: 660px;
+          height: 50px;
+          margin-bottom: 14px;
+          .ivu-input{
+            height: 49px;
+            font-size: 16px;
+            position: relative;
+            top: 1px;
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            font-size: 14px;
+            text-indent: 20px;
+          }
+          .ivu-input:hover{
+            border-color: $purple-color;
+          }
+          .ivu-input:focus{
+            box-shadow: 0 0 0 #fff;
+            border-color: $purple-color;
+          }
+          .ivu-input-group-append{
+            width: 100px;
+            font-size: 16px;
+            padding: 0;
+            border-top-right-radius: 14px;
+            border-bottom-right-radius: 14px;
+            cursor: pointer;
+            span{
+              width: 101%;
+              height: 49px;
+              line-height: 46px;
+              display: inline-block;
+              border-top-right-radius: 12px;
+              border-bottom-right-radius: 12px;
+              background-color: $purple-color;
+              color: #fff;
+            }
+          }
+        }
+        .typeSelect{
+          width: 100%;
+          padding: 25px 30px 5px 30px;
+          border-radius: 12px;
+          background-color: #ffffff;
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.14);
+          margin-bottom: 14px;
+          font-size: 0;
+          .typeWrapper{
+            .typeItem{
+              display: flex;
+              .typeName{
+                flex: 0 0 84px;
+                padding-top: 5px;
+                text-align: left;
+                font-size: 14px;
+                line-height: 1;
+              }
+              .wrapper{
+                flex: 1;
+                word-wrap: break-word;
+                margin-right: 20px;
+                height: 43px;
+                overflow: hidden;
+                .item{
+                  display: inline-block;
+                  padding: 6px 9px 5px 9px;
+                  font-size: 14px;
+                  line-height: 1;
+                  margin:0 0 20px 5px;
+                  cursor: pointer;
+                }
+                .active{
+                  background-color: $sec-color;;
+                  border-radius: 12px;
+                }
+              }
+              .addOrSubtract{
+                height: 18px;
+              }
+              .nc-icon{
+                font-size: 16px;
+                text-align: right;
+                color: $purple-color;
+                position: relative;
+                top: 4px;
+              }
+            }
+          }
+        }
+
+      }
+    }
+    .my-findJob{
+      width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      .left{
+        width: 660px;
+        .mySubscribe{
+          width: 100%;
+          border-radius: 12px;
+          background-color: #ffffff;
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.14);
+          padding: 18px 30px 0 30px;
+          margin-bottom: 14px;
+          .row{
+            width: 100%;
+            display: flex;
+          }
+          .row:nth-child(1){
+            justify-content: space-between;
+          }
+          .title{
+            font-size: 16px;
+            font-weight: 500;
+          }
+          .changeSub{
+            width: 114px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 17px;
+            border: solid 1px #482929;
+            font-size: 14px;
+            cursor: pointer;
+          }
+          .mySubType{
+            flex: 1;
+            margin-top: 20px;
+            overflow: hidden;
+            height: 43px;
+            .active{
+              border-radius: 12px;
+              background-color: $sec-color;
+            }
+            .item{
+              padding: 5px 10px 6px 10px;
+              display: inline-block;
+              font-size: 14px;
+              line-height: 1;
+              cursor: pointer;
+              margin: 0 0 20px 5px;
+            }
+          }
+          .addOrSubtract{
+            margin-top: 20px;
+            height: 18px;
+            .nc-icon{
+              font-size: 16px;
+              text-align: right;
+              color: $purple-color;
+              position: relative;
+              top: 4px;
+            }
+          }
+        }
+        .myCollect{
+          width: 100%;
+          .collectHeader{
+            width: 100%;
+            padding: 20px 30px;
+            border-radius: 12px;
+            background-color: #ffffff;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.14);
+            margin-bottom: 14px;
+          }
+        }
+      }
+    }
+    .findJob-list, .my-findJob{
+      .left{
+        .companyWrapper{
+          .comHeader{
+            width: 100%;
+            line-height: 50px;
+            border-radius: 12px;
+            background-color: #ffffff;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.14);
+            padding: 0 30px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            .ivu-radio{
+              margin-right: 8px;
+            }
+            .ivu-radio-group-item{
+              display: inline-block;
+              font-size: 14px;
+              margin-right: 32px;
+              margin-bottom: 0;
+              .ivu-radio-inner{
+                border-radius: 2px;
+                background: #d1d1d1;
+              }
+              .ivu-radio-checked .ivu-radio-inner{
+                border-color: $purple-color;
+                background-color: $purple-color;
+              }
+              .ivu-radio-inner{
+                font-family: 'myicons';
+              }
+              .ivu-radio-inner::after{
+                font-size: 12px;
+                content: "\eda1";
+                line-height: 12px;
+                background-color: $purple-color;
+                color: #fff;
+                left: 0;
+                top: 0;
+              }
+            }
+            .sortSelect{
+              display: inline-block;
+              margin: auto 0;
+              line-height: 52px;
+              .ivu-select-selection{
+                border-radius: 4px;
+                box-shadow: none;
+                border: none;
+                color: #482929;
+                font-size: 14px;
+                .ivu-select-selected-value{
+                  font-size: 14px;
+                }
+                .ivu-icon{
+                  color: #9085e7;
+                }
+              }
+              .ivu-select-item-selected, .ivu-select-item-selected:hover{
+                color: #482929;
+                background: #e4e1fa;
+              }
+              .ivu-select-item{
+                color: #482929;
+                font-size: 14px!important;
+              }
+            }
+          }
+
+        }
+        .companyList{
+          width: 100%;
+          padding: 20px 30px;
+          border-radius: 12px;
+          background-color: #ffffff;
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.14);
+          .comItem{
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #e8e8e8;
+            padding-bottom: 12px;
+            margin-bottom: 14px;
+            min-height: 100px;
+            .row{
+              width: 100%;
+              display: flex;
+              font-size: 0;
+              .avater{
+                width: 64px;
+                height: 64px;
+                display: inline-block;
+                border-radius: 2px;
+                background-color: #faf8f6;
+                border: solid 1px #e8e8e8;
+                flex: 0 0 64px;
+                margin-right: 20px;
+              }
+              .about{
+                flex: 1;
+                .comChannelType{
+                  line-height: 20px;
+                  padding: 0 7px;
+                  font-size: 12px;
+                  border-radius: 20px;
+                  background-color: $purple-color;
+                  color: #fff;
+                  display: inline-block;
+                }
+                .comType{
+                  padding: 2px 7px;
+                  font-size: 12px;
+                  border-radius: 20px;
+                  background-color: $sec-color;
+                  margin-left: 8px;
+                }
+                .companyName{
+                  font-size: 14px;
+                  font-weight: bold;
+                  margin-left: 10px;
+                }
+                .position, .city{
+                  line-height: 12px;
+                  font-size: 12px;
+                  color: #949494;
+                }
+                .position{
+                  margin: 10px 0 6px 0;
+                }
+              }
+              .detailBlock{
+                flex: 0 0 134px;
+                height: 30px;
+                font-size: 14px;
+                text-align: center;
+                border-radius: 15px;
+                background-color: $sec-color;
+                padding-top: 1px;
+                .detail{
+                  width: 70px;
+                  line-height: 27px;
+                  display: inline-block;
+                  vertical-align: middle;
+                  padding-left: 7px;
+                  font-size: 14px;
+                  color: #482929;
+                  cursor: pointer;
+                }
+                .nc-icon{
+                  width: 21px;
+                  line-height: 13px;
+                  padding-right: 25px;
+                  vertical-align: middle;
+                  border-right: 1px solid #fff;
+                  color: #fff;
+                  text-align: center;
+                  cursor: pointer;
+                }
+              }
+            }
+            .row:nth-child(2){
+              justify-content: space-between;
+              justify-content: flex-end;
+              margin-top: 12px;
+              .time{
+                line-height: 1;
+                font-size: 12px;
+                color: #949494;
+                display: flex;
+                align-items: flex-end;
+              }
+            }
+          }
+          .lastComItem{
+            margin-bottom: 0;
+            border-bottom: none;
+          }
+          .emptyWrapper{
+            width: 100%;
+            min-height: 260px;
+            text-align: center;
+            padding-top: 60px;
+            .emptyImg{
+              width: 125px;
+              display: block;
+              margin: 30px auto 0 auto;
+            }
+            .emptyText{
+              height: 14px;
+              display: block;
+              margin-top: 20px;
+              font-size: 14px;
+              color: #7e7e7e;
+            }
+          }
+        }
+      }
+      .right{
+        width: 320px;
+        .userWindow, .userWindow-loginAlert{
+          margin-bottom: 14px;
+        }
+        .userMessage{
+          width: 100%;
+          border-radius: 12px;
+          background-color: #ffffff;
+          box-shadow: 0 0 1px 0 #b0b0b0;
+          text-align: center;
+          padding: 20px;
+          margin-bottom: 14px;
+          .avater{
+            width: 60px;
+            height: 60px;
+            display: inline-block;
+            border-radius: 50%;
+            background: #d8d8d8;
+            margin-bottom: 11px;
+          }
+          .name{
+            line-height: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+          }
+          .vip{
+            line-height: 22px;
+            color: #191919;
+            margin-bottom: 28px;
+            font-size: 12px;
+          }
+          .subscribeAndCollection{
+            font-size: 0;
+            width: 100%;
+            .subscribe, .collection{
+              width: 50%;
+              display: inline-block;
+              font-size: 16px;
+              cursor: pointer;
+              .number{
+                font-size: 18px;
+              }
+              .title{
+                font-size: 14px;
+              }
+            }
+          }
+        }
+        .subscribeList{
+          width: 100%;
+          border-radius: 12px;
+          background-color: #ffffff;
+          padding: 20px 20px;
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.14);
+          font-size: 0;
+          .subHeader{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            .title{
+              line-height: 33px;
+              font-size: 18px;
+              font-weight: bold;
+            }
+            .pushSetting{
+              width: 84px;
+              height: 30px;
+              line-height: 30px;
+              font-size: 14px;
+              text-align: center;
+              border-radius: 17px;
+              border: solid 1px #482929;
+              position: relative;
+              top: 5px;
+            }
+          }
+          .subWrapper{
+            .item{
+              border-bottom: 0.1px solid #e8e8e8;
+              margin: 15px 0;
+              .btn-nano{
+                padding: 1px 9px;
+              }
+              .row{
+                width: 100%;
+                display: flex;
+              }
+              .row:nth-child(1){
+                justify-content: space-between;
+                margin-bottom: 9px;
+                button{
+                  font-weight: normal;
+                  width: 56px;
+                  text-align: center;
+                  padding: 1px 0;
+                }
+              }
+              .row:nth-child(3){
+                justify-content: flex-end;
+                margin-bottom: 14px;
+                line-height: 1;
+              }
+              .createTitle{
+                font-size: 15px;
+                font-weight: bold;
+                line-height: 1.07;
+              }
+              .createBtn{
+                background-color: $sec-color;
+                color: #482929;
+              }
+              .active{
+                background-color: #9b9b9b;
+                color: #fff;
+              }
+              .subImg{
+                width: 50px;
+                height: 50px;
+                display: inline-block;
+                border-radius: 4px;
+                border: solid 1px #e8e8e8;
+                margin-right: 16px;
+                vertical-align: top;
+              }
+              .about{
+                width: 208px;
+                font-size: 12px;
+                display: inline-block;
+                color: #7e7e7e;
+                vertical-align: top;
+                line-height: 1.5;
+              }
+              .peopleNum{
+                font-size: 12px;
+                color: #949494;
+              }
+            }
+            .item:last-child{
+              border-bottom: none;
+            }
+          }
+        }
+        .tipContent{
+          width: 100%;
+          border-radius: 12px;
+          text-align: center;
+          font-size: 14px;
+          margin-bottom: 14px;
+          box-shadow: rgba(0, 0, 0, 0.14) 0px 1px 2px 0px;
+          .tipImg{
+            width: 320px;
+            display: block;
+          }
+          .about{
+            width: 168px;
+            display: inline-block;
+            line-height: 1.57;
+            text-align: left;
+            vertical-align: middle;
+          }
+          .btn{
+            padding: 7px 0;
+            text-align: center;
+            width: 100px;
+            display: inline-block;
+            background-color: $sec-color;
+            color: #482929;
+            font-size: 14px;
+            position: relative;
+            right: -5px;
+          }
+        }
+      }
+    }
+  }
+  .subscribeAlert{
+    .content{
+      width: 400px;
+      height: 500px;
+    }
+    .nc-simple-remove{
+      cursor: pointer;
+    }
+    .content{
+      text-align: center;
+      padding: 46px 0;
+      .title{
+        font-size: 16px;
+        font-weight: 500;
+        display: block;
+        margin-bottom: 20px;
+      }
+      .subSteps{
+        width: 94%;
+        margin:0 0 30px 20px;
+        .ivu-steps-item.ivu-steps-status-finish .ivu-steps-head-inner{
+          background-color: #482929;
+          border-color: #482929;
+        }
+        .ivu-steps-item.ivu-steps-status-finish .ivu-steps-head-inner span, .ivu-steps-item.ivu-steps-status-finish .ivu-steps-head-inner>.ivu-steps-icon{
+          color: #fff;
+        }
+        .ivu-steps-item.ivu-steps-status-process .ivu-steps-head-inner{
+          border-color: #482929;
+          background-color: #482929;
+        }
+        .ivu-steps-tail{
+          left: 60px;
+          i::after{
+            left: -14px;
+          }
+        }
+        .ivu-steps-item.ivu-steps-status-finish .ivu-steps-tail>i:after{
+          background-color: #482929;
+        }
+      }
+      .subscribeItem{
+        // width: 85%;
+        // height: 270px;
+        overflow: auto;
+        margin: 0 60px;
+        // padding-left: 5px;
+        text-align: left;
+        .item{
+          padding-bottom: 12px;
+        }
+        .subItemTitle{
+          text-align: left;
+          font-size: 14px;
+          font-weight: 500;
+          margin: 0 0 8px 15px;
+        }
+        .current3{
+          color: #482929;
+          width: 100%;
+          text-align: center;
+          padding: 45px 0;
+          .tips{
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.71;
+            color: #ff4242;
+          }
+          .qrCodeImg{
+            width: 140px;
+            height: 140px;
+            display: inline-block;
+            border-radius: 10px;
+            // background-color: #d8d8d8;
+            margin-bottom: 40px;
+          }
+          .okIcon{
+            font-size: 70px;
+            color: #9085e7;
+            position: relative;
+            top: 8px;
+            right: 0;
+            text-align: center;
+          }
+          .message{
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            padding: 16px 0 40px 0;
+          }
+          .about{
+            text-align: left;
+            width: 280px;
+            font-size: 14px;
+            line-height: 1.71;
+          }
+        }
+        .wrapper{
+          width: 100%;
+          font-size: 0;
+          li{
+            width: 74px;
+            line-height: 24px;
+            display: inline-block;
+            font-size: 14px;
+            margin: 5px 29px 5px 0;
+            text-align: center;
+            cursor: pointer;
+            &:nth-child(3n){
+              margin-right: 0;
+            }
+          }
+          .active{
+            border-radius: 12px;
+            background-color: $sec-color;
+          }
+        }
+      }
+      .btnGroup{
+        width: 280px;
+        position: absolute;
+        bottom: 30px;
+        left: 60px;
+        display: flex;
+        justify-content: space-between;
+        .closeBtn, .next, .prev, .finishBtn{
+          width: 128px;
+          display: inline-block;
+          background-color: $sec-color;
+          color: #482929;
+        }
+        .prev{
+          background-color: $purple-color;
+          color: #fff
+        }
+      }
+      .btnWrapper{
+        position: absolute;
+        bottom: 30px;
+        left: 60px;
+        button{
+          width: 280px;
+          display: inline-block;
+          background-color: $sec-color;
+          color: #482929;
+          // &.finishBtn{
+          //   width: 128px;
+          // }
+        }
+      }
+
+    }
+  }
+  .createSubAlert{
+    .content .subSteps{
+      width: 84%;
+      margin: 0 0 30px 40px;
+    }
+  }
+
+}
+#companyDetail{
+  width: 100%;
+  .section{
+    width: 100%;
+    margin-bottom: 100px;
+    .comHeader{
+      width: 100%;
+      height: 220px;
+      background: url(../images/findJob/job_top@2x.png) repeat;
+      background-size: 50px 50px;
+      box-shadow: 0 0 1px 0 #b0b0b0;
+      font-size: 0;
+      .ivu-radio-group .ivu-radio-group-item{
+        display: inline-block;
+      }
+      .job_detail_bg{
+
+          // width: 1280px;
+          margin: 0 auto;
+          background-repeat: no-repeat;
+          background-position: 50%;
+          height: 220px;
+          margin: 0 auto;
+          position: relative;
+          @include retina('../images/findJob/pen.png', 2, 1280px 220px, left top no-repeat transparent);
+          //background-image: url(../images/findJob/pen.png);
+        .container{
+          width: 720px;
+          height: 220px;
+          padding: 20px 0;
+          .companyName{
+            line-height: 50px;
+            font-size: 38px;
+            font-weight: 500;
+            margin-bottom: 8px;
+          }
+          .url{
+            display: block;
+            font-size: 18px;
+            margin-bottom: 12px;
+          }
+          .state{
+            font-size: 14px;
+            line-height: 1.14;
+            margin-top: 19px;
+          }
+          .btn-group{
+            position: absolute;
+            bottom: 24px;
+            right: 0;
+            .collect-btn{
+              background-color: #fff;
+              color: #482929;
+            }
+            .int-btn{
+              background-color: #9085e7;
+              color: #ffffff;
+            }
+          }
+        }
+      }
+      // .container{
+      //   width: 1280px;
+      //   height: 190px;
+      //   margin: 0 auto;
+      //   position: relative;
+      //   padding: 20px 280px 24px 280px;
+      //   background: url(../images/findJob/pen.png) no-repeat;
+      //   .companyName{
+      //     line-height: 50px;
+      //     font-size: 38px;
+      //     font-weight: 500;
+      //     margin-bottom: 8px;
+      //   }
+      //   .url{
+      //     display: block;
+      //     font-size: 18px;
+      //     margin-bottom: 12px;
+      //   }
+      //   .state{
+      //     font-size: 14px;
+      //     line-height: 1.14;
+      //     margin-top: 19px;
+      //   }
+      //   .btn-group{
+      //     position: absolute;
+      //     bottom: 24px;
+      //     right: 280px;
+      //     .collect-btn{
+      //       background-color: #fff;
+      //       color: #482929;
+      //     }
+      //     .int-btn{
+      //       background-color: #9085e7;
+      //       color: #ffffff;
+      //     }
+      //   }
+      // }
+    }
+    .content{
+      width: 860px;
+      border-radius: 12px;
+      background-color: #ffffff;
+      box-shadow: 0 0 1px 0 #b0b0b0;
+      margin: 29px auto 0 auto;
+      padding: 24px 70px;
+      max-width: 860px;
+      word-wrap: break-word;
+      word-break: break-all;
+      .wrapper{
+        .item{
+          margin-bottom: 50px;
+          img{
+            max-width: 100%;
+          }
+          .row{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+          }
+          .title{
+            font-size: 18px;
+            font-weight: 500;
+          }
+          .line{
+            width: 610px;
+            height: 1px;
+            display: inline-block;
+            margin-top: 13px;
+            background-color: #9b9b9b;
+            opacity: 0.4;
+          }
+          .about{
+            font-size: 15px;
+          }
+          .positionList{
+            //margin-left: 20px;
+            li{
+              line-height: 26px;
+              list-style-type: disc;
+              font-size: 15px;
+              font-weight: 500;
+            }
+            img{
+              max-width: 100%;
+            }
+          }
+          .url{
+            font-size: 15px;
+            color: #4a4a4a;
+            text-decoration: underline;
+          }
+          .get{
+            display: inline-block;
+            position: relative;
+            .getAlert{
+              width: 262px;
+              height: 271.2px;
+              position: absolute;
+              top: 53px;
+              left: -40px;
+              border-radius: 1.2px;
+              background-color: $sec-color;
+              text-align: center;
+              padding: 31px 37px;
+              border-radius: 8px;
+              box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.14);
+              .triangle{
+                width: 28px;
+                height: 14px;
+                position: absolute;
+                top: -13px;
+                left: 125px;
+              }
+              .qrCode{
+                width: 150px;
+                height: 150px;
+                display: inline-block;
+                background-color: #fff;
+                margin-bottom: 24px;
+              }
+            }
+          }
+
+        }
+      }
+    }
+    .fl-btn{
+      width: 160px;
+      display: inline-block;
+      text-align: center;
+      font-size: 16px;
+      border-radius: 20px;
+      margin-left: 14px;
+      cursor: pointer;
+    }
+  }
+}
+.ivu-poptip-popper[x-placement^=bottom] .ivu-poptip-arrow:after{
+  border-bottom-color: rgba(0, 0, 0, 0.3);
+  top: 0;
+  left: -6px;
+}
+.ivu-poptip-inner{
+  width: auto;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: inline-block;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.24);
+}
+.ivu-poptip-body-content-inner{
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.29;
+}
+
+.ice_alert1{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 200;
+}
+.ice_alert1 .content{
+  width: 400px;
+  height: 360px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 30px 60px;
+  transform: translate(-50%, -50%);
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+}
+.ice_alert1 .content .nc-simple-remove {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.subStateAlert{
+  .content{
+    padding: 30px 60px;
+    text-align: center;
+  }
+  .qRcode{
+    width: 140px;
+    height: 140px;
+    display: inline-block;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+  .about{
+    font-size: 14px;
+    line-height: 1.71;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .okBtn{
+    width: 280px;
+    line-height: 40px;
+    position: absolute;
+    bottom: 30px;
+    display: block;
+    font-size: 18px;
+    border-radius: 4px;
+    background-color: $sec-color;
+    border: solid 1px rgba(5, 5, 5, 0.08);
+    cursor: pointer;
+    border-radius: 20px;
+    background-color: #ffcc2d;
+  }
+  .message{
+    margin-bottom: 34px;
+  }
+  .okIcon{
+    display: inline-block;
+    font-size: 80px;
+    margin-bottom: 16px;
+    color: #9085e7;
+  }
+}
+.side-box{
+  width: 320px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  padding: 25px 30px 35px 30px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.14);
+  .box-title{
+    text-align: center;
+  }
+  .box-header{
+    height: 50px;
+    margin-bottom: 25px;
+  }
+  .icon-robot{
+    display: block;
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    background-color: #9085e7;
+    border: solid 1px #e8e8e8;
+    font-size: 24px;
+    color: #fff;
+    text-align: center;
+    line-height: 50px;
+  }
+  .right-text{
+    width: 194px;
+    font-size: 14px;
+    line-height: 1.43;
+    color: #7e7e7e;
+  }
+}
+
+.mySubType .item{
+  position: relative;
+  .item_reddot{
+    position: absolute;
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 7px;
+    background-color: #ff4242;
+    top: 49%;
+    transform: translate(0,-50%);
+    left: -3px;
+  }
+}
+
+@media all and (-webkit-min-device-pixel-ratio: 1.5), all and (-o-min-device-pixel-ratio: 3 / 2), all and (min--moz-device-pixel-ratio: 1.5), all and (min-device-pixel-ratio: 1.5) {
+  #companyDetail .section .comHeader .container{
+    background-image: url("../images/findJob/pen@2x.png") no-repeat;
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  #companyDetail .section .comHeader .container {
+    background-image: url("../images/findJob/pen@2x.png") no-repeat;
+  }
+}

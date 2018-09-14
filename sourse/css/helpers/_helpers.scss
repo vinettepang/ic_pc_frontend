@@ -1,0 +1,142 @@
+.fixedcenter{
+    position: absolute;
+    @include transform(translate(-50%, -50%));
+    //transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+}
+// Float
+.clear {
+    clear: both;
+    display: block;
+    overflow: hidden;
+    // visibility: hidden;
+    // width: 0;
+    // height: 0;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: "\0020";
+    display: block;
+    overflow: hidden;
+    // visibility: hidden;
+    // width: 0;
+    // height: 0;
+}
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix {
+    zoom: 1;
+}
+
+.inline-block{
+    display: inline-block;
+}
+
+.pull-left { float: left; }
+.pull-right { float: right; }
+
+// Text Alignment
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+.text-center { text-align:center; }
+.text-justify { text-align: justify; }
+.text-vertical{vertical-align:middle; }
+.text-remark { color: #666; font-size: 0.9em; }
+.text-bottom{vertical-align: bottom;}
+.text-color { color: $text-color; }
+.text-primary { color: $text-primary-color; }
+.text-secondary { color: $text-secondary-color; }
+.text-success { color: $text-success-color; }
+.text-emphasis { color: $text-emphasis-color; }
+.text-warning { color: $text-warning-color; }
+.text-error { color: $text-error-color; }
+.star { color: $text-emphasis-color; }
+
+.text-purple{color:$purple-color;}
+
+.img-container img { max-width: 100%; }
+
+// Position
+%absolute { position: absolute; }
+%fixed { position: fixed; }
+%relative { position: relative; }
+%static { position: static;}
+
+%visuallyhidden {
+    margin: -1px;
+    padding: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip: rect(0, 0, 0, 0);
+    position: absolute;
+}
+
+.m0{margin-bottom: 0 !important; &.top-border-nav:before{margin-bottom: 0 !important;}}
+.m-b-10{margin-bottom:10px !important;}
+.m-b-25{margin-bottom:25px !important;}
+.m-b-20{margin-bottom:20px !important;}
+.m-b-24{margin-bottom:24px !important;}
+.m-b-30{margin-bottom: 30px !important;}
+.m-b-40{margin-bottom: 40px !important;}
+.m-b-5{margin-bottom:5px !important;}
+.m-t-10{margin-top:10px !important;}
+.m-t-16{margin-top:16px !important;}
+.m-t-20{margin-top:20px !important;}
+.m-t-40{margin-top: 40px !important;}
+.m-t-5{margin-top:5px !important;}
+.m-l-10{margin-left:10px !important;}
+.m-l-14{margin-left:14px !important;}
+.m-l-20{margin-left:20px !important;}
+.m-l-5{margin-left:5px !important;}
+.m-r-10{margin-right:10px !important;}
+.m-r-12{margin-right:14px !important;}
+.m-r-14{margin-right:14px !important;}
+.m-r-20{margin-right:20px !important;}
+.m-r-15{margin-right:15px !important;}
+.m-r-5{margin-right:5px !important;}
+.p-b-10{padding-bottom:10px !important;}
+.p-b-20{padding-bottom:20px !important;}
+.p-b-24{padding-bottom:24px !important;}
+.p-b-5{padding-bottom:5px !important;}
+.p-t-10{padding-top:10px !important;}
+.p-t-20{padding-top:20px !important;}
+.p-t-5{padding-top:5px !important;}
+.p-l-10{padding-left:10px !important;}
+.p-l-12{padding-left:12px !important;}
+.p-l-20{padding-left:20px !important;}
+.p-l-5{padding-left:5px !important;}
+.p-r-10{padding-right:10px !important;}
+.p-r-20{padding-right:20px !important;}
+.p-r-5{padding-right:5px !important;}
+
+.scrollbar,
+.page-scroll-box{
+    overflow: auto;
+    &::-webkit-scrollbar,::-webkit-scrollbar, ::-webkit-scrollbar, ::-webkit-scrollbar {
+      width: 8px;
+    }
+    &::-webkit-scrollbar-thumb,::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb {
+      background: #cccccc;
+      border-radius: 10px;
+    }
+}
+.scrollbar-vertical,.horizon-timeline-box .horizon-timeline {
+    overflow: auto
+}
+.scrollbar-vertical::-webkit-scrollbar,
+.horizon-timeline-box .horizon-timeline::-webkit-scrollbar,
+.scrollbar-vertical ::-webkit-scrollbar,
+.horizon-timeline-box .horizon-timeline ::-webkit-scrollbar,.scrollbar-vertical ::-webkit-scrollbar,.horizon-timeline-box .horizon-timeline ::-webkit-scrollbar,.scrollbar-vertical ::-webkit-scrollbar,.horizon-timeline-box .horizon-timeline ::-webkit-scrollbar {
+    height: 6px
+}
+
+.scrollbar-vertical::-webkit-scrollbar-thumb,.horizon-timeline-box .horizon-timeline::-webkit-scrollbar-thumb,.scrollbar-vertical ::-webkit-scrollbar-thumb,.horizon-timeline-box .horizon-timeline ::-webkit-scrollbar-thumb,.scrollbar-vertical ::-webkit-scrollbar-thumb,.horizon-timeline-box .horizon-timeline ::-webkit-scrollbar-thumb,.scrollbar-vertical ::-webkit-scrollbar-thumb,.horizon-timeline-box .horizon-timeline ::-webkit-scrollbar-thumb {
+    background: #cccccc;
+    border-radius: 10px
+}

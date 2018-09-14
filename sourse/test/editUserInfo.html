@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/iview/2.7.4/styles/iview.css">
+    <link rel="stylesheet" type="text/css" href="../css/app.css?v=0.1">
+    <style type="text/css">
+    .ivu-radio-group .ivu-radio-group-item {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .ivu-radio-group .ivu-radio-group-item .ivu-radio-checked .ivu-radio-inner {
+        border-color: rgb(144, 133, 231);
+    }
+
+    .ivu-radio-group .ivu-radio-group-item .ivu-radio-checked .ivu-radio-inner:after {
+        background-color: rgb(144, 133, 231);
+    }
+    .info-list{
+    	padding: 20px 100px;
+    }
+    .info-list .item{
+    	margin-bottom: 20px;
+    }
+    .info-list .section-title{
+    	font-size: 16px;
+		color: #482929;
+		font-weight: bold;
+		margin-bottom: 22px;
+    }
+    .info-list .section-title .star{
+    	line-height: 16px;
+    	color: #FF801A;
+    	padding-right: 6px;
+    	font-weight: bold;
+    }
+    .info-list .info-title{
+    	background: #9085E7;
+		border-radius: 100px;
+		margin: 0 auto;
+		width: 140px;
+		height: 34px;
+		font-size: 16px;
+		color: #FFFFFF;
+		text-align: center;
+		line-height: 34px;
+		margin-bottom: 30px;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container660 shadow-box info-list">
+    	<h3 class="info-title">白熊学员信息</h3>
+        <section class="item">
+            <p class="section-title"><i class="star">*</i>您目前的身份：</p>
+            <radio-group v-model="userMessage.positionType" @on-change="positionUpdata">
+                <radio label="1">在校生</radio>
+                <radio label="2">往届毕业生</radio>
+                <radio label="3">在职人员</radio>
+            </radio-group>
+            <span v-show="userMessage.positionType == 0 && editSave_state" class="warning"><i class="nc-icon nc-circle-bold-remove"></i>请填写您目前的身份</span>
+        </section>
+        <section class="item" v-show="userMessage.positionType == 1 || userMessage.positionType == 2" style="display: none">
+            <p class="section-title"><i class="star">*</i>您所在的学校：</p>
+            <Cascader v-model="userMessage.schoolModel" style="width:200px" :data="messageList.schoolList" filterable></Cascader>
+            <span v-show="userMessage.schoolModel[0] == 0 && editSave_state" class="warning"><i class="nc-icon nc-circle-bold-remove"></i>请填写您所在的学校</span>
+        </section>
+        <section class="item" v-show="userMessage.positionType == 1 || userMessage.positionType == 2" style="display: none">
+            <p class="section-title"><i class="star">*</i>您的专业：</p>
+            <i-select v-model="userMessage.subjectModel" style="width:200px" size="" filterable>
+                <i-option v-for="item in messageList.subjectList" :value="item.id" :key="item.id">{{ item.label }}</i-option>
+            </i-select>
+            <span v-show="userMessage.subjectModel == 0 && editSave_state" class="warning"><i class="nc-icon nc-circle-bold-remove"></i>请填写您的专业</span>
+        </section>
+        <section class="item" v-show="userMessage.positionType == 1" style="display: none">
+            <p class="section-title"><i class="star">*</i>您的年级：</p>
+            <i-select v-model="userMessage.gradeModel" style="width:200px" @on-change="gradeUpdata" size="" filterable>
+                <i-option v-for="item in messageList.gradeList" :value="item.id" :key="item.id">{{ item.label }}</i-option>
+            </i-select>
+            <i-input v-model="userMessage.otherGradeModel" v-show="otherGradeShow" style="width: 200px; display: none;"></i-input>
+            <span v-show="userMessage.gradeModel == 0 && editSave_state" class="warning"><i class="nc-icon nc-circle-bold-remove"></i>请填写您所在的年级</span>
+            <span v-show="userMessage.otherGradeModel == '' && otherGradeShow && editSave_state" class="warning"><i class="nc-icon nc-circle-bold-remove"></i>请填写其他</span>
+        </section>
+        <section class="item" v-show="userMessage.positionType == 2" style="display: none">
+            <p class="section-title"><i class="star">*</i>您的毕业时间：</p>
+            <i-select v-model="userMessage.graduaTime" style="width:200px" size="" filterable>
+                <i-option v-for="item in messageList.graduaTimeList" :value="item.id" :key="item.id">{{ item.label }}</i-option>
+            </i-select>
+            <span v-show="userMessage.graduaTime == 0 && editSave_state" class="warning"><i class="nc-icon nc-circle-bold-remove"></i>请填写您的毕业时间</span>
+        </section>
+        <section class="item" v-show="findJobStateShow" style="display: none">
+            <p class="section-title">您目前的求职状态：（{{findJobStateTitle}}）<i class="star">*</i></p>
+            <i-select v-model="userMessage.findJobStateModel" style="width:200px" @on-change="findJobStateUpdata" size="" filterable>
+                <i-option v-for="item in findJobStateList_1" :value="item.id" :key="item.id">{{ item.label }}</i-option>
+            </i-select>
+            <i-input v-model="userMessage.otherFindJobModel" v-show="otherFindJobShow" style="display: none; width: 200px"></i-input>
+            <span v-show="userMessage.findJobStateModel == 0 && editSave_state" class="warning"><i class="nc-icon nc-circle-bold-remove"></i>请填写您目前的求职状态</span>
+            <span v-show="userMessage.otherFindJobModel == '' && otherFindJobShow && editSave_state" class="warning"><i class="nc-icon nc-circle-bold-remove"></i>请填写其他</span>
+        </section>
+        <section class="item" v-show="industryShow" style="display: none">
+            <p class="section-title"><i class="star">*</i>您希望进入的行业：</p>
+            <Checkbox-Group v-model="userMessage.industryModel">
+                <!-- <Checkbox label="0"><span>金融财务</span></Checkbox>
+                    <Checkbox label="1"><span>IT互联网</span></Checkbox>
+                    <Checkbox label="2"><span>建筑地产</span></Checkbox> -->
+                <Checkbox :label="item.id" v-for="item in messageList.localIndustryList"><span>{{ item.label }}</span></Checkbox>
+            </Checkbox-Group>
+            <span v-show="userMessage.industryModel.length == 0 && editSave_state" class="warning"><i class="nc-icon nc-circle-bold-remove"></i>请填写您希望进入的行业</span>
+        </section>
+        <section class="item" v-show="intCompanyShow" style="display: none">
+            <p class="section-title">是否有意向的公司：<i class="star">*</i></p>
+            <radio-group v-model="userMessage.intCompanyModel" @on-change="intCompanyUpdata">
+                <radio label="1">是</radio>
+                <radio label="0">否</radio>
+            </radio-group>
+        </section>
+        <section class="item" v-show="targetCompanyShow" style="display: none">
+            <p class="section-title"><i class="star">*</i>您求职的目标公司是：</p>
+            <p style="font-size: 12px; line-height: 1.5">多个公司请用逗号分隔</p>
+            <i-input v-model="userMessage.targetCompany" style="width: 200px"></i-input>
+            <span v-show="userMessage.targetCompany == '' && editSave_state" class="warning"><i class="nc-icon nc-circle-bold-remove"></i>请填写其他</span>
+        </section>
+        <section class="item" v-show="offerInputShow" style="display: none">
+            <p class="section-title"><i class="star">*</i>offer 公司-岗位：</p>
+            <i-input v-model="userMessage.offerInputModel" style="width: 200px"></i-input>
+            <span v-show="userMessage.offerInputModel == '' && editSave_state" class="warning"><i class="nc-icon nc-circle-bold-remove"></i>请填写offer 公司-岗位</span>
+        </section>
+        <section class="item" v-show="userMessage.positionType == 3" style="display: none">
+            <p class="section-title"><i class="star">*</i>您所在的行业：</p>
+            <i-select v-model="userMessage.localIndustryModel" style="width:200px" size="" filterable>
+                <!-- <i-option value="0" key="0">请选择</i-option> -->
+                <i-option v-for="item in messageList.localIndustryList" :value="item.id" :key="item.id">{{ item.label }}</i-option>
+            </i-select>
+            <span v-show="userMessage.localIndustryModel == 0 && editSave_state" class="warning"><i class="nc-icon nc-circle-bold-remove"></i>请填写您所在的行业</span>
+        </section>
+        <section class="item" v-show="userMessage.positionType == 3" style="display: none">
+            <p class="section-title"><i class="star">*</i>您的职位类别：</p>
+            <i-select v-model="userMessage.Occupation" style="width:200px" size="" filterable>
+                <!-- <i-option value="0" key="0">请选择</i-option> -->
+                <i-option v-for="item in messageList.OccupationList" :value="item.id" :key="item.id">{{ item.label }}</i-option>
+            </i-select>
+            <span v-show="userMessage.Occupation == 0 && editSave_state" class="warning"><i class="nc-icon nc-circle-bold-remove"></i>请填写的职位类别</span>
+        </section>
+        <section class="item" v-show="userMessage.positionType == 3" style="display: none">
+            <p class="section-title"><i class="star">*</i>您的从业时间：</p>
+            <i-select v-model="userMessage.PraTime" style="width:200px" size="" filterable>
+                <!-- <i-option value="0" key="0">请选择</i-option> -->
+                <i-option v-for="item in messageList.PraTimeList" :value="item.id" :key="item.id">{{ item.label }}</i-option>
+            </i-select>
+            <span v-show="userMessage.PraTime == 0 && editSave_state" class="warning"><i class="nc-icon nc-circle-bold-remove"></i>请填写您的从业时间</span>
+        </section>
+
+        <div class="btn-group1">
+			<button class="close-btn btn-circle w120 btn-primary" @click="closeSetDetail()">取消</button>
+			<button class="btn-circle w120 btn-secondary" @click="saveSetDetail">保存</button>
+		</div>
+    </div>
+    <script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/iview/2.7.4/iview.js"></script>
+    <script type="text/javascript">
+    var app = new Vue({
+        el: '#app',
+        data() {
+            return {
+                //学生端和教师端的推送默认选中值
+                tabItemIndex: 1,
+                detailShow: true,
+                setDetailShow: false,
+                setDetailContent: '编辑个人资料',
+                monentPosi: 0, //点击保存后的身份（用来控制个人资料的显示）
+                messageList: {
+                    positionList: [ //身份数据
+                        {
+                            id: 1,
+                            label: '在校生'
+                        },
+                        {
+                            id: 2,
+                            label: '往届毕业生'
+                        },
+                        {
+                            id: 3,
+                            label: '在职人员'
+                        },
+                    ],
+                    schoolList: [{ //学校数据
+                        value: 0,
+                        label: '请选择',
+                    }],
+                    subjectList: [], //专业数据
+                    gradeList: [], //年级数据
+                    companyList: [], //意向公司数据
+                    findJobStateList: [], //求职状态数据
+                    graduaTimeList: [], //毕业时间数据
+                    localIndustryList: [], //希望进入行业数据
+                    OccupationList: [], //职业类别数据
+                    PraTimeList: [] //从业时间数据
+
+                },
+                userMessage: { //相关的value和id
+                    positionType: 1, //0代表新用户，1代表在校生，2代表往届毕业生，3代表在职人员
+                    schoolModel: [0], //学校的默认值
+                    subjectModel: '', //专业的默认值
+                    gradeModel: '', //年级的默认值
+                    intCompanyModel: '1', //意向公司 0 是 1 否
+                    findJobStateModel: '0', //求职状态的默认值
+                    targetCompany: '', //目标公司
+                    graduaTime: '0', //毕业时间的默认值
+                    industryModel: [0], //希望进入行业的默认值
+                    localIndustryModel: '0', //所在行业的默认值
+                    otherGradeModel: '', //其他年级
+                    offerInputModel: '', //offer 公司-岗位
+                    otherFindJobModel: '', //其他求职状态
+                    Occupation: '0', //职位的默认值
+                    PraTime: '0' //从业时间的默认值
+                },
+                userLabel: { //用户的label信息（文本）
+                    position: '',
+                    school: '',
+                    subject: '',
+                    grade: '',
+                    intCompany: '',
+                    findJobState: '',
+                    targetCompany: '',
+                    graduaTime: '',
+                    industry: '',
+                    localIndustry: '',
+                    otherGrade: '',
+                    offerInput: '',
+                    otherFindJob: '',
+                    Occupation: '',
+                    PraTime: ''
+                },
+                findJobStateList_1: [],
+                //编辑个人资料的保存状态
+                editSave_state: false,
+
+                findJobStateTitle: '非应届毕业生', //求职状态的title
+                findJobStateShow: false,
+                otherGradeShow: false, //其他年级输入框的显示状态
+                industryShow: false, //希望进入行业的显示状态
+                intCompanyShow: false, //意向公司的显示状态
+                offerInputShow: false, //offer-岗位的显示状态
+                otherFindJobShow: false, //其他求职状态输入框的显示状态
+                targetCompanyShow: false, //目标公司的显示状态
+
+                setDetailHeight: 0,
+                editUserMess_btnState: true //编辑按钮的显示状态
+            }
+        },
+        watch: {},
+        created() {
+            let that = this
+            // $ajax('index/user/base_data',{
+
+            // })
+            //       post("{:url('index/user/base_data')}", {}, function(res){
+            //         if(that.messageList.schoolList.length === 1){
+            //           that.messageList.schoolList = res.college
+            //         }
+            //         that.messageList.gradeList = res.grade
+            //         that.messageList.graduaTimeList = res.graduation_time
+            //         that.messageList.PraTimeList = res.graduation_time
+            //         that.messageList.localIndustryList = res.industry
+            //         that.messageList.findJobStateList = res.job_status
+            //         that.messageList.OccupationList = res.position
+            //         that.messageList.subjectList = res.specialty
+            //         that.getUserInfo()
+            //       }, function(res){
+            //         console.log(res)
+            //       })
+        },
+        mounted() {
+
+        },
+        computed: {
+            // getCountryCode:function(){   //person.id为当前用户id
+            //     return "+"+ this.global.reg.country_code;
+            // }
+        },
+        methods: {
+            //ajax
+            _getUserMessage() {},
+            //更新通知设置数据
+            updataNoticeData() {
+                post(centerNoticeUrl, this.reqNotice, function(data) {
+                    if (data.code === 1) {
+                        //console.log(data.msg)
+                    }
+                }, function(res) {
+                    //console.log(res)
+                })
+            },
+            //设置高度
+            _detailShow() {
+                this.detailShow = !this.detailShow
+                if (!this.detailShow) {
+                    if (this.userMessage.positionType == 1) {
+                        this.userMessage.intCompanyModel == 1 ? this.$refs.container.style.height = '295px' : this.$refs.container.style.height = '260px'
+                    } else if (this.userMessage.positionType == 2) {
+                        this.userMessage.intCompanyModel == 1 ? this.$refs.container.style.height = '260px' : this.$refs.container.style.height = '225px'
+                    } else {
+                        this.$refs.container.style.height = '198px'
+                    }
+                } else {
+                    this.$refs.container.style.height = '180px'
+                }
+            },
+            //拉取下拉框数据
+            _setDetailShow() {
+                this.updataUserMessage_init()
+                let _this = this
+                this.setDetailShow = !this.setDetailShow
+
+
+                if (this.setDetailShow) {
+                    this.editUserMess_btnState = false
+                    this.$refs.setDetail.style.display = ''
+                    this.$refs.container.style.height = this.$refs.setDetail.clientHeight + 95 + 'px'
+                } else if (!this.detailShow && !this.setDetailShow) {
+                    this.setDetailContent = '编辑个人资料'
+                    this.$refs.container.style.height = '260px'
+                } else {
+                    this.setDetailContent = '编辑个人资料'
+                    this.$refs.container.style.height = '180px'
+                }
+            },
+            //初始化编辑个人资料的默认值
+            updataUserMessage_init() {
+                this.positionType_init(this.userMessage.positionType) //身份默认值初始化
+                this.positionUpdata(this.userMessage.positionType) //身份修改
+                this.findJobStateUpdata(this.userMessage.findJobStateModel) //求职状态修改
+                this.gradeUpdata(this.userMessage.gradeModel) //年级修改
+                this.intCompanyUpdata(this.userMessage.intCompanyModel) //
+
+            },
+            //身份默认值初始化
+            positionType_init(code) {
+                this.userMessage.positionType = code
+                if (code == 2) {
+                    this.findJobStateShow = true
+                }
+            },
+            //关闭编辑个人资料
+            closeSetDetail() {
+                this.setDetailShow = false
+                this.editUserMess_btnState = true
+                this.editSave_state = false
+
+                if (!this.detailShow && !this.setDetailShow) {
+                    this.setDetailContent = '编辑个人资料'
+                    if (this.userMessage.positionType == 1) {
+                        this.userMessage.intCompanyModel == 1 ? this.$refs.container.style.height = '295px' : this.$refs.container.style.height = '260px'
+                    } else if (this.userMessage.positionType == 2) {
+                        this.userMessage.intCompanyModel == 1 ? this.$refs.container.style.height = '260px' : this.$refs.container.style.height = '225px'
+                    } else {
+                        this.$refs.container.style.height = '198px'
+                    }
+                } else {
+                    this.setDetailContent = '编辑个人资料'
+                    this.$refs.container.style.height = '180px'
+                }
+            },
+            //保存个人资料
+            saveSetDetail() {
+                //检查是否为空
+                this.editSave_state = true
+                let uMess = this.userMessage
+
+                //positionType 0代表新用户 1、2、3代表其他三种身份
+                if (uMess.positionType == 0) {
+                    return
+                } else if (uMess.positionType == 1) {
+                    if (uMess.schoolModel[0] != 0 && uMess.subjectModel != '0' && uMess.gradeModel != '0') {
+                        //年级model 其他年级
+                        if (uMess.gradeModel == 5 && uMess.otherGradeModel != '') {
+                            //求职状态 offer
+                            if (uMess.findJobStateModel == 7) {
+                                //其他offer
+                                uMess.offerInputModel === '' ? '' : this.updata_detail(1)
+                            } else if (uMess.findJobStateModel == 8) {
+                                uMess.otherFindJobModel === '' ? '' : this.updata_detail(1)
+                            } else if (uMess.findJobStateModel != '0') {
+                                //希望进入行业
+                                if (uMess.industryModel.length != 0) {
+                                    //意向公司为是
+                                    if (uMess.intCompanyModel == '1') {
+                                        uMess.targetCompany == '' ? '' : this.updata_detail(1)
+                                    } else {
+                                        this.updata_detail(1)
+                                    }
+                                }
+                            } else {
+                                return
+                            }
+                        } else if (uMess.gradeModel != 5) {
+                            //求职状态 offer
+                            if (uMess.findJobStateModel == 7) {
+                                //其他offer
+                                uMess.offerInputModel === '' ? '' : this.updata_detail(1)
+                            } else if (uMess.findJobStateModel == 8) {
+                                uMess.otherFindJobModel === '' ? '' : this.updata_detail(1)
+                            } else if (uMess.findJobStateModel != '0') {
+                                //希望进入行业
+                                if (uMess.industryModel.length != 0) {
+                                    //意向公司为是
+                                    if (uMess.intCompanyModel == '1') {
+                                        uMess.targetCompany == '' ? '' : this.updata_detail(1)
+                                    } else {
+                                        this.updata_detail(1)
+                                    }
+                                }
+                            } else {
+                                return
+                            }
+                        }
+                    } else {
+                        return
+                    }
+                } else if (uMess.positionType == 2) {
+                    if (uMess.schoolModel[0] != 0 && uMess.subjectModel != '0' && uMess.graduaTime != '0' && uMess.findJobStateModel != '0') {
+                        //求职状态 offer
+                        if (uMess.findJobStateModel == 7) {
+                            uMess.offerInputModel === '' ? '' : this.updata_detail(2)
+                        } else if (uMess.findJobStateModel == 8) {
+                            uMess.otherFindJobModel === '' ? '' : this.updata_detail(2)
+                        } else if (uMess.findJobStateModel != '0') {
+                            if (uMess.industryModel.length != 0) {
+                                if (uMess.intCompanyModel == '1') {
+                                    uMess.targetCompany == '' ? '' : this.updata_detail(2)
+                                } else {
+                                    this.updata_detail(2)
+                                }
+                            }
+                        } else {
+                            return
+                        }
+                    } else {
+                        return
+                    }
+                } else if (uMess.positionType == 3) {
+                    if (uMess.localIndustryModel != '0' && uMess.Occupation != '0' && uMess.PraTime != '0') {
+                        this.updata_detail(3)
+                    } else {
+                        return
+                    }
+                }
+            },
+            //提交个人信息
+            updata_detail(monentPosi) {
+                this.monentPosi = monentPosi
+                // if (this.userMessage.industryModel.length > 0) {
+                //   this.userMessage.industryModel = this.userMessage.industryModel.join(',')
+                // }
+                // if (this.userMessage.schoolModel.length > 0) {
+                //   this.userMessage.schoolModel = this.userMessage.schoolModel.join(',')
+                // }
+                var _data = this.userMessage;
+                let that = this
+                post("/index/user/upload_profile", _data, function(result) {
+                    if (result) {
+                        that.$toast('收藏成功', {
+                            iconType: 'success'
+                        })
+                    }
+                });
+
+                that.userLabel_updata()
+                that.closeSetDetail()
+            },
+            //身份修改
+            positionUpdata(value) {
+                let _this = this
+                this.userMessage.positionType = parseInt(value)
+                this.editSave_state = false
+                if (value == 1) {
+                    if (this.userMessage.gradeModel == 0) {
+                        this.findJobStateShow = false
+                    } else {
+                        this.userMessage.gradeModel == 2 || this.userMessage.gradeModel === 4 ? this.findJobStateTitle = '非毕业生' : this.findJobStateTitle = '应届毕业生'
+                    }
+                    if (this.findJobStateShow === false) {
+                        this.industryShow = false
+                        this.intCompanyShow = false
+                    }
+                    this.gradeUpdata(this.userMessage.gradeModel)
+                } else if (value == 2) {
+                    this.findJobStateShow = true
+                    this.findJobStateTitle = '非应届毕业生'
+                    this.findJobStateList_1 = []
+                    this.messageList.findJobStateList.forEach(function(item) {
+                        if (item.id != 1 && item.id != 2) {
+                            _this.findJobStateList_1.push(item)
+                        }
+                    })
+                    if (this.userMessage.findJobStateModel != 0) {
+                        this.industryShow = true
+                        this.intCompanyShow = true
+                    }
+                    this.findJobStateUpdata(this.userMessage.findJobStateModel)
+                } else {
+                    this.findJobStateShow = false
+                    this.industryShow = false
+                    this.intCompanyShow = false
+                    this.offerInputShow = false
+                    this.targetCompanyShow = false
+                }
+                this.findJobStateList_1 = _this.findJobStateList_1
+
+            },
+            //年级修改
+            gradeUpdata(value) {
+                let _this = this
+
+                if (value == 0 || value === undefined) {
+                    this.findJobStateShow = false
+                    this.otherGradeShow = false
+                    this.offerInputShow = false
+                    this.industryShow = false
+                    this.intCompanyShow = false
+                    this.targetCompanyShow = false
+                } else if (value == 1 || value == 3) {
+                    this.findJobStateShow = true
+                    this.otherGradeShow = false
+                    this.findJobStateTitle = '非毕业生'
+                    this.findJobStateList_1 = []
+                    this.messageList.findJobStateList.forEach(function(item) {
+                        if (item.id != 2 && item.id != 3) {
+                            _this.findJobStateList_1.push(item)
+                        }
+                    })
+                    this.findJobStateUpdata(this.userMessage.findJobStateModel)
+                } else if (value == 2 || value == 4) {
+                    this.findJobStateShow = true
+                    this.otherGradeShow = false
+                    this.findJobStateTitle = '应届毕业生'
+                    this.findJobStateList_1 = []
+                    this.messageList.findJobStateList.forEach(function(item) {
+                        if (item.id != 1 && item.id != 3) {
+                            _this.findJobStateList_1.push(item)
+                        }
+                    })
+                    this.findJobStateUpdata(this.userMessage.findJobStateModel)
+                } else if (value == 5) {
+                    this.findJobStateShow = true
+                    this.otherGradeShow = true
+                    this.offerInputShow = false
+                    this.findJobStateTitle = '应届毕业生'
+                    this.findJobStateList_1 = []
+                    this.messageList.findJobStateList.forEach(function(item) {
+                        if (item.id != 1 && item.id != 3) {
+                            _this.findJobStateList_1.push(item)
+                        }
+                    })
+                    this.findJobStateUpdata(this.userMessage.findJobStateModel)
+                }
+
+
+            },
+            //求职状态修改
+            findJobStateUpdata(value) {
+                //0-请选择 1-5 6-已拿到offer 7-其他
+                if (value == 0 || value === undefined) {
+                    this.industryShow = false
+                    this.intCompanyShow = false
+                    this.offerInputShow = false
+                    this.targetCompanyShow = false
+                } else if (value == 7) {
+                    this.industryShow = false
+                    this.intCompanyShow = false
+                    this.offerInputShow = true
+                    this.targetCompanyShow = false
+                } else if (value == 8) {
+                    this.industryShow = true
+                    this.intCompanyShow = true
+                    this.offerInputShow = false
+                    this.targetCompanyShow = false
+                } else {
+                    this.industryShow = true
+                    this.intCompanyShow = true
+                    this.offerInputShow = false
+                    this.userMessage.intCompanyModel == '1' ? this.targetCompanyShow = true : this.targetCompanyShow = false
+                }
+
+                value == 8 ? this.otherFindJobShow = true : this.otherFindJobShow = false
+
+            },
+            //意向公司的修改
+            intCompanyUpdata(value) {
+                value == '1' ? this.targetCompanyShow = true : this.targetCompanyShow = false
+
+            },
+            updataTabItem_index(index) {
+                this.tabItemIndex = index
+            },
+            //更新订阅推送频率
+            updataPush_index(index) {
+                this.reqNotice.daily_job_remind_val = index
+                this.updataNoticeData()
+            },
+            //更新通知设置的开关选择
+            updataNotice(index, e) {
+                let data = 0
+                e.target.innerText == '关' ? data = 0 : data = 1
+                switch (index) {
+                    case 0:
+                        this.reqNotice.daily_task_check = data;
+                        break;
+                    case 1:
+                        this.reqNotice.daily_job_remind = data;
+                        break;
+                    case 2:
+                        this.reqNotice.video_comment_remind = data;
+                        break;
+                    case 3:
+                        this.reqNotice.big_homework_remind = data;
+                        break;
+                    case 4:
+                        this.reqNotice.homework_remind = data;
+                        break;
+                }
+                this.updataNoticeData()
+            },
+            userLabel_init() {
+
+            },
+            userLabel_updata() {
+                let messList = this.messageList
+                let uMess = this.userMessage
+                let uLabel = this.userLabel
+
+                messList.positionList.forEach(function(item) {
+                    if (item.id == uMess.positionType) {
+                        uLabel.position = item.label
+                    }
+                })
+
+                messList.schoolList.forEach(function(item) {
+                    if (item.value == uMess.schoolModel[0]) {
+                        if (item.children != undefined) {
+                            item.children.forEach(function(i) {
+                                if (i.value == uMess.schoolModel[1]) {
+                                    uLabel.school = i.label
+                                }
+                            })
+                        }
+                    }
+                })
+
+                messList.subjectList.forEach(function(item) {
+                    if (item.id == uMess.subjectModel) {
+                        uLabel.subject = item.label
+                    }
+                })
+
+                messList.gradeList.forEach(function(item) {
+                    if (item.id == uMess.gradeModel && item.id != 5) {
+                        uLabel.grade = item.label
+                    }
+                })
+
+                uMess.intCompanyModel == 1 ? uLabel.intCompany = '是' : uLabel.intCompany = '否'
+
+                messList.findJobStateList.forEach(function(item) {
+                    if (item.id == uMess.findJobStateModel) {
+                        uLabel.findJobState = item.label
+                    }
+                })
+
+                uLabel.targetCompany = uMess.targetCompany
+
+                messList.graduaTimeList.forEach(function(item) {
+                    if (item.id == uMess.graduaTime) {
+                        uLabel.graduaTime = item.label
+                    }
+                })
+
+
+                if (uMess.industryModel.length > 0) {
+                    typeof(uMess.industryModel) === 'string' ? uMess.industryModel = uMess.industryModel.split(','): ''
+                    uMess.industryModel.forEach(function(i) {
+                        messList.localIndustryList.forEach(function(item) {
+                            if (parseInt(i) == item.id) {
+                                typeof(uLabel.industry) == 'string' ? uLabel.industry = []: ''
+                                uLabel.industry.push(item.label)
+                            }
+                        })
+                    })
+
+                    uLabel.industry.length > 0 ? uLabel.industry = uLabel.industry.join('、') : ''
+                }
+
+                messList.localIndustryList.forEach(function(item) {
+                    if (item.id == uMess.localIndustryModel) {
+                        uLabel.localIndustry = item.label
+                    }
+                })
+
+                uLabel.otherGrade = uMess.otherGradeModel
+                uLabel.offerInput = uMess.offerInputModel
+                uLabel.otherFindJob = uMess.otherFindJobModel
+
+                messList.OccupationList.forEach(function(item) {
+                    if (item.id == uMess.Occupation) {
+                        uLabel.Occupation = item.label
+                    }
+                })
+
+                messList.PraTimeList.forEach(function(item) {
+                    if (item.id == uMess.PraTime) {
+                        uLabel.PraTime = item.label
+                    }
+                })
+            },
+            getArrage(arr, type) {
+                let newArr = new Array()
+                if (arr.indexOf(',') != -1) {
+                    newArr = arr.replace(/\[|]/g, '').replace(/\"/g, "").replace(/\'/g, "")
+                    newArr = newArr.split(",")
+                    if (type == 'int' && newArr.length > 0) {
+                        newArr.forEach(function(item, i) {
+                            newArr[i] = parseInt(item)
+                        })
+                    }
+                } else {
+                    newArr = arr
+                }
+                return newArr
+            },
+            getUserInfo() {
+                let that = this
+                post("{:url('index/user/upload_profile')}", { get_info: 1 }, function(result) {
+                    //that.userMessage = result;
+                    console.log(result)
+                    if (result && result != 'null') {
+                        that.userMessage.positionType = result.user_identity
+                        that.userMessage.schoolModel = that.getArrage(result.school_summary)
+                        that.userMessage.subjectModel = parseInt(result.specialty)
+                        that.userMessage.gradeModel = parseInt(result.grade)
+                        that.userMessage.intCompanyModel = result.has_target_company
+                        that.userMessage.findJobStateModel = parseInt(result.apply_status)
+                        that.userMessage.targetCompany = result.target_company
+                        that.userMessage.graduaTime = parseInt(result.graduation_time)
+                        that.userMessage.industryModel = that.getArrage(result.target_industry, 'int')
+                        that.userMessage.localIndustryModel = result.my_industry
+                        that.userMessage.otherGradeModel = result.grade_ext
+                        that.userMessage.offerInputModel = result.offer
+                        that.userMessage.otherFindJobModel = result.apply_status_ext
+                        that.userMessage.Occupation = result.occupation
+                        that.userMessage.PraTime = result.pratime
+
+                        that.monentPosi = result.user_identity
+
+                        that.getSetDetailHeight()
+                        that.userLabel_updata()
+                        that.updataUserMessage_init()
+                    } else {
+                        that.userMessage.positionType = 0
+                    }
+
+                });
+            }
+        }
+    })
+    </script>
+</body>
+
+</html>

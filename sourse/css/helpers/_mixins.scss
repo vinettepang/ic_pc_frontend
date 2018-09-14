@@ -1,0 +1,234 @@
+@mixin css3-prefix($property, $value) {
+    -webkit-#{$property}: #{$value};
+     -moz-#{$property}: #{$value};
+       -o-#{$property}: #{$value};
+          #{$property}: #{$value};
+}
+@mixin css3-afterfix($property, $value) {
+    #{$property}: -webkit-#{$value};
+    #{$property}: -moz-#{$value};
+    #{$property}: -o-#{$value};
+    #{$property}: #{$value};
+}
+@mixin display-flex() {
+    display: -moz-box;  /* Firefox */
+    display: -ms-flexbox;    /* IE10 */
+    display: -webkit-box;    /* Safari */
+    display: -webkit-flex;    /* Chrome, WebKit */
+    display: box;
+    display: flexbox;
+    display: flex;
+    // display: -webkit-box;
+    // display: -webkit-flex;
+    // display: -ms-flexbox;
+    // display: flex;
+}
+@mixin display-inline-flex() {
+    display: -webkit-inline-flex;
+    display:inline-flex;
+}
+@mixin flex-1() {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+
+@mixin center($width:null,$height:null){
+    position: absolute;
+            top: 50%;
+            left: 50%;
+    @if $width and $height {
+            // do margin
+            width: $width;
+            height: $height;
+            margin: #{-($height / 2)} #{0 0} -#{$width / 2};   //这里如果直接写 0 0 他会编译为 margin: xx 0 xx 而不是 margin：xx 0 0 xx，所以用 #{0 0}
+
+    } @else if not $width and not $height {
+            // do transform translate(-50%,-50%)
+            transform: translate(-50%,-50);
+    } @else if not $width {
+            // do margin-top and transform translateX
+            height: $height;
+            margin-top: -(height / 2);
+            transform: translateX(-50%);
+    } @else {
+            // do margin-left and transform translateY
+            width: $width;
+            margin-top: -(width / 2);
+            transform: translateY(-50%);
+    }
+}
+@mixin background-gradient($startColor: #3C3C3C, $endColor: #999999) {
+    background-color: $startColor;
+    background-image: -webkit-gradient(linear, left top, left bottom, from($startColor), to($endColor));
+    background-image: -webkit-linear-gradient(top, $startColor, $endColor);
+    background-image:    -moz-linear-gradient(top, $startColor, $endColor);
+    background-image:     -ms-linear-gradient(top, $startColor, $endColor);
+    background-image:      -o-linear-gradient(top, $startColor, $endColor);
+    background-image:         linear-gradient(top, $startColor, $endColor);
+    filter:            progid:DXImageTransform.Microsoft.gradient(startColorStr='#{$startColor}', endColorStr='#{$endColor}');
+}
+
+@mixin background-radial($startColor: #FFFFFF, $startPos: 0%, $endColor: #000000, $endPos:100%) {
+    background: -moz-radial-gradient(center, ellipse cover, $startColor $startPos, $endColor $endPos);
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop($startPos,$startColor), color-stop($endPos,$endColor));
+    background: -webkit-radial-gradient(center, ellipse cover, $startColor $startPos,$endColor $endPos);
+    background: -o-radial-gradient(center, ellipse cover, $startColor $startPos,$endColor $endPos);
+    background: -ms-radial-gradient(center, ellipse cover, $startColor $startPos,$endColor $endPos);
+    background: radial-gradient(ellipse at center, $startColor $startPos,$endColor $endPos);
+}
+
+@mixin background-size($width: 100%, $height: $width) {
+    @if type-of($width) == 'number' and $height != null {
+        @include css3-prefix('background-size', $width $height);
+    } @else {
+        @include css3-prefix('background-size', $width);
+    }
+}
+
+@mixin background-opacity($color: #000, $opacity: 0.85) {
+    background: $color;
+    background: rgba($color, $opacity);
+}
+
+@mixin border-radius($radius: 12px) {
+    @include css3-prefix('border-radius', $radius);
+}
+
+@mixin border-top-radius($radius: 5px) {
+    -webkit-border-top-right-radius: $radius;
+    -webkit-border-top-left-radius: $radius;
+    -moz-border-radius-topleft: $radius;
+    -moz-border-radius-topright: $radius;
+    border-top-right-radius: $radius;
+    border-top-left-radius: $radius;
+}
+@mixin border-right-radius($radius: 5px) {
+    -webkit-border-bottom-right-radius: $radius;
+    -webkit-border-top-right-radius: $radius;
+    -moz-border-radius-bottomright: $radius;
+    -moz-border-radius-topright: $radius;
+    border-bottom-right-radius: $radius;
+    border-top-right-radius: $radius;
+}
+@mixin border-bottom-radius($radius: 5px) {
+    -webkit-bottom-right-radius: $radius;
+    -webkit-bottom-left-radius: $radius;
+    -moz-border-radius-bottomright: $radius;
+    -moz-border-radius-bottomleft: $radius;
+    border-bottom-right-radius: $radius;
+    border-bottom-left-radius: $radius;
+}
+@mixin border-left-radius($radius: 5px) {
+    -webkit-border-bottom-left-radius: $radius;
+    -webkit-border-top-left-radius: $radius;
+    -moz-border-radius-bottomleft: $radius;
+    -moz-border-radius-topleft: $radius;
+    border-bottom-left-radius: $radius;
+    border-top-left-radius: $radius;
+}
+
+@mixin border-radius-separate($topLeftRadius: 5px, $topRightRadius: 5px, $bottomLeftRadius: 5px, $bottomRightRadius: 5px) {
+    -webkit-border-top-left-radius:     $topLeftRadius;
+    -webkit-border-top-right-radius:    $topRightRadius;
+    -webkit-border-bottom-right-radius: $bottomRightRadius;
+    -webkit-border-bottom-left-radius:  $bottomLeftRadius;
+
+    -moz-border-radius-topleft:     $topLeftRadius;
+    -moz-border-radius-topright:    $topRightRadius;
+    -moz-border-radius-bottomright: $bottomRightRadius;
+    -moz-border-radius-bottomleft:  $bottomLeftRadius;
+
+    border-top-left-radius:     $topLeftRadius;
+    border-top-right-radius:    $topRightRadius;
+    border-bottom-right-radius: $bottomRightRadius;
+    border-bottom-left-radius:  $bottomLeftRadius;
+}
+
+@mixin box($orient: horizontal, $pack: center, $align: center) {
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+
+    @include css3-prefix('box-orient', $orient);
+    @include css3-prefix('box-pack', $pack);
+    @include css3-prefix('box-align', $align);
+}
+
+@mixin box-rgba($r: 60, $g: 3, $b: 12, $opacity: 0.23, $color: #3C3C3C) {
+    background-color: transparent;
+    background-color: rgba($r, $g, $b, $opacity);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$color}',endColorstr='#{$color}');
+            zoom:   1;
+}
+
+@mixin box-shadow($shadow...) {
+    @include css3-prefix('box-shadow', $shadow);
+}
+
+@mixin box-sizing($type: border-box) {
+    @include css3-prefix('box-sizing', $type);
+}
+
+@mixin columns($count: 3, $gap: 10) {
+    @include css3-prefix('column-count', $count);
+    @include css3-prefix('column-gap', $gap);
+}
+
+@mixin flex($value: 1) {
+    @include css3-prefix('box-flex', $value);
+}
+
+@mixin flip($scaleX: -1) {
+    @include css3-prefix('transform', scaleX($scaleX));
+    filter:            FlipH;
+    -ms-filter:        "FlipH";
+}
+
+@mixin font-face($fontFamily: myFont, $eotFileSrc: 'myFont.eot', $woffFileSrc: 'myFont.woff', $ttfFileSrc: 'myFont.ttf') {
+  font-family: $fontFamily;
+  src: url($eotFileSrc)  format('eot'),
+       url($woffFileSrc) format('woff'),
+       url($ttfFileSrc)  format('truetype');
+}
+
+@mixin opacity($opacity: 0.5) {
+    $opacityMultiplied: ($opacity * 100);
+
+    filter:         alpha(opacity=$opacityMultiplied);
+    -ms-filter:     "progid:DXImageTransform.Microsoft.Alpha(Opacity=" + $opacityMultiplied + ")";
+    @include css3-prefix('opacity', $opacity);
+}
+
+@mixin outline-radius($radius: 5px) {
+    @include css3-prefix('outline-radius', $radius);
+}
+
+@mixin resize($direction: both) {
+    @include css3-prefix('resize', $direction);
+}
+
+@mixin rotate($deg: 0, $m11: 0, $m12: 0, $m21: 0, $m22: 0) {
+    @include css3-prefix('transform', rotate($deg + deg));
+    filter: progid:DXImageTransform.Microsoft.Matrix(
+       M11=#{$m11}, M12=#{$m12}, M21=#{$m21}, M22=#{$m22}, sizingMethod='auto expand');
+    zoom: 1;
+}
+
+@mixin transform($params) {
+    @include css3-prefix('transform', $params);
+}
+
+@mixin transform-style($style: preserve-3d) {
+    @include css3-prefix('transform-style', $style);
+}
+
+@mixin fonticon($font-size, $content: '') {
+    font: normal normal normal $font-size/1 "FontAwesome";
+    font-size: $font-size;
+    content: $content;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

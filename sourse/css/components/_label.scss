@@ -1,0 +1,153 @@
+.label-solid {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 18px;
+    font-size: 16px;
+    font-weight: normal;
+    color: $pri-color;
+
+    &.border-rclr {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    &.label-taro {
+        color: #fff;
+        background-color: $taro-color;
+    }
+    &.r4 {
+        border-radius: 4px;
+    }
+    &.mini {
+        font-size: 12px;
+        padding: 3px 9px !important;
+        margin-right: 14px;
+    }
+    &.label-70{
+        display: inline-block;
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        padding: 0;
+    }
+}
+
+.label-border {
+    padding: 4px 15px;
+    border-radius: 2px;
+    font-size: 16px;
+    color: $pri-color;
+
+    &.border-rclr {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    &.r0 {
+        border-radius: 0;
+    }
+    &.r4 {
+        border-radius: 4px;
+    }
+}
+
+.label-sec {
+    background-color: $sec-color;
+}
+
+.label-dark-grey {
+    color: #fff;
+    background-color: $dark-grey-color;
+}
+
+.label-purple {
+    color: #fff;
+    background-color: $purple-color;
+}
+
+.label-border-taro {
+    color: $taro-color;
+    border: 1px solid $taro-color;
+}
+
+.label-border-orange {
+    color: $orange-color;
+    border: 1px solid $orange-color;
+}
+
+.label-border-green {
+    color: $green-color;
+    border: 1px solid $green-color;
+}
+
+.label-border-pri {
+    color: $pri-color;
+    border: 1px solid $pri-color;
+}
+
+.label-border-lightyellow {
+    color: $lightyellow-color;
+    border: 1px solid $lightyellow-color;
+}
+
+.label-border-purple {
+    color: $purple-color;
+    border: 1px solid $purple-color;
+}
+
+.label-thin {
+    font-size: 10px;
+    padding: 1px 10px;
+    text-align: center;
+}
+
+.label-mini {
+    height: 22px;
+    width: 50px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.label-camp {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: inline-block;
+    width: 66px;
+    height: 38px;
+    @include retina('../images/camp-label.png', 2, 66px 38px, left top no-repeat transparent);
+}
+
+.italic-label {
+    overflow: hidden;
+    .label-sm {
+        position: absolute;
+        bottom: 1px;
+        right: -31px;
+        font-size: 10px;
+        height: 20px;
+        line-height: 20px;
+        width: 100px;
+        color: #482929;
+        text-align: center;
+        letter-spacing: 1.71px;
+        background-color: #ffd733;
+        transform: rotate(-30deg);
+        -ms-transform: rotate(-30deg);
+        -webkit-transform: rotate(-30deg);
+        -moz-transform: rotate(-30deg);
+        -o-transform: rotate(-30deg);
+    }
+}
+
+.icon-box {
+    display: inline-block;
+    color: #fff;
+    font-size: 36px;
+    width: 70px;
+    height: 70px;
+    margin-bottom: 16px;
+    border-radius: 35px;
+    text-align: center;
+}
