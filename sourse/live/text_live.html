@@ -11,8 +11,6 @@
     <link rel="stylesheet" type="text/css" href="__{SRC}__/plugin/iview/styles/iview.css">
     <link rel="stylesheet" type="text/css" href="__{SRC}__/css/iconstyle.css">
     <link rel="stylesheet" type="text/css" href="./sourse/live/css/live.css">
-    <!-- <script src="/static/js/player.js"></script> -->
-    <!-- <script src="__{SRC}__/components/player/player.js"></script> -->
     <script src="__{SRC}__/components/liveTimer/liveTimer.js"></script>
     <script src="/static/plugin/vue/vue.min.js"></script>
     <script src="/static/plugin/iview/iview.js"></script>
@@ -29,8 +27,10 @@
             <div class="text-live-item" v-for="(item,index) in textLiveData" v-if="item.status">
                 <p class="header-num">{{parseInt(index)+1}}</p>
                 <p class="item-question" v-html="item.ask_content"></p>
-                <p class="item-answer" :class="{'multi-ellipsis':!item.opened && item.answer_content.length >50}" v-html="item.answer_content"></p>
-                <span class="btn-open" @click="toggleTextLiveItem" :data-index="index" v-if="!item.opened && item.answer_content.length >50">{{item.opened?'点击收起':'点击展开'}}</span>
+                <p class="item-answer" :class="{'multi-ellipsis':!item.opened && item.answer_content_nohtml.length >60}" v-html="item.answer_content"></p>
+                <p class="btn-dot" v-if="!item.opened && item.answer_content_nohtml.length >60">...</p>
+                <span class="btn-open" @click="toggleTextLiveItem" :data-index="index"
+                v-if="!item.opened && item.answer_content_nohtml.length >60">{{item.opened?'点击收起':'点击展开'}}</span>
             </div>
             <div class="live-copy-right">©2018 icebear</div>
         </div>

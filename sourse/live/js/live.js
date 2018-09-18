@@ -208,7 +208,7 @@ var vm = new Vue({
         },
         //音频播放结束时
         audioEnded(e) {
-            console.log('audioEnded')
+            //console.log('audioEnded')
 
             this.audioEndedStorage == null ? this.audioEndedStorage = {} : ''
             let id = "" + this.config.live_room_id + '_' + this.playerList[this.isPlayIndex].mid
@@ -225,13 +225,13 @@ var vm = new Vue({
         },
         //音频暂停时
         audioPause(e) {
-            console.log('audioPause')
+            //console.log('audioPause')
             this.backToNowIcon = false
             this.$refs.myplayer[this.isPlayIndex].getParentAudioState(false)
         },
         //音频播放时
         audioPlaying(e) {
-            console.log('audioPlaying')
+            //console.log('audioPlaying')
             this.$refs.myplayer[this.isPlayIndex].getParentAudioState(true)
 
             //记录最后播放
@@ -270,10 +270,17 @@ var vm = new Vue({
             setTimeout(() => {
                 _.audioRef.play()
             }, 50)
-            if (_.status.user_live_status == 3) {
+            // if (_.status.user_live_status == 3) {
+            //     setTimeout(() => {
+            //         _.backToNearAudio()
+            //     }, 60)
+            // }
+            _.isVision()
+            if (_.backToNowIcon == false) {
                 setTimeout(() => {
+                    _.$refs.myplayer[_.isPlayIndex].getParentAudioState(true)
                     _.backToNearAudio()
-                }, 60)
+                }, 200)
             }
         },
         //音频控制 - 下一首
@@ -292,10 +299,17 @@ var vm = new Vue({
             setTimeout(() => {
                 _.audioRef.play()
             }, 50)
-            if (_.status.user_live_status == 3) {
-                setTimeout(() => {
+            // if (_.status.user_live_status == 3) {
+            //     setTimeout(() => {
+            //         _.backToNearAudio()
+            //     }, 60)
+            // }
+            _.isVision()
+            _.$refs.myplayer[_.isPlayIndex].getParentAudioState(true)
+            if (_.backToNowIcon == false) {
+               setTimeout(() => {
                     _.backToNearAudio()
-                }, 60)
+                }, 200)
             }
         },
         //切换音频
@@ -321,12 +335,10 @@ var vm = new Vue({
             }
         },
         _audioswiper(pptId) {
-            console.log(pptId + ' pptId')
             this.changeSwiperById(pptId)
         },
         //组件里回调 - 播放
         _audioplay(mid) {
-            console.log(mid)
             let index = this.playerList.findIndex(function(item) {
                 return item.mid == mid;
             })
@@ -357,11 +369,17 @@ var vm = new Vue({
         // },
         //组件里回调 - 定位当前音频块
         backToNearAudio(type) {
-            console.log(document.querySelector('.player.player_active'))
+            //console.log(document.querySelector('.player.player_active'))
+            // alert(type)
+            // alert(document.querySelector('.player.player_active')!= null)
+            // if(type == 'next'){
+            //     this.isPlayIndex
+            // }
             if (document.querySelector('.player.player_active') != null) {
                 let offset = document.querySelector('.player.player_active').offsetTop
                 type == 'click' ? this.animateScroll(offset - 150) : this.animateScroll(offset - 150, 200)
                 //this.animateScroll(offset - 150)//
+                //document.querySelector('.talk-container').scrollTop = offset - 150
             }
         },
         //组件里回调 - 定位当前音频块 - 减慢循环
@@ -405,31 +423,17 @@ var vm = new Vue({
         isVision() {
             if (document.querySelector('.player.player_active') == null) { return }
             //获取div距离顶部的偏移量
-            let top = document.querySelector('.player.player_active').offsetTop
+            let playerTop = document.querySelector('.player.player_active').offsetTop
             //获取屏幕高度
             //let windowTop = window.innerHeight;
-            let windowTop = document.querySelector('.talk-container').clientHeight
+            let talkTop = document.querySelector('.talk-container').clientHeight
             //屏幕卷去的高度
             //let scrollTops = document.body.scrollTop;
             let scrollTops = document.querySelector('.talk-container').scrollTop
-
-            if ((scrollTops < top && windowTop > top) || ((windowTop + scrollTops) > top && windowTop < top)) {
-                this.backToNowIcon = false
-            } else {
+            if ((talkTop > playerTop && playerTop < scrollTops) || (talkTop < playerTop && playerTop < scrollTops) || (talkTop < playerTop && playerTop > scrollTops + talkTop)) {
                 this.backToNowIcon = true
-            }
-        },
-        //当播放列表距离顶部大于360px时，返回顶部的按钮出现
-        backTopShow() {
-            let that = this
-            if (document.querySelector('.talk-container') == null) { return }
-            document.querySelector('.talk-container').onscroll = function() {
-                let distance = document.querySelector('.talk-container').scrollTop;
-                if (distance > 30 && that.audioPlayState) {
-                    that.backToNowIcon = true
-                } else {
-                    that.backToNowIcon = false
-                }
+            } else {
+                this.backToNowIcon = false
             }
         },
         //返回播放位置
@@ -509,11 +513,13 @@ var vm = new Vue({
         },
         //获取文字直播
         filterTextLiveData() {
-            let textLiveData = this.textLiveData
+            let that = this
+            let textLiveData = that.textLiveData
             textLiveData.map((item) => {
                 item.opened = false
+                item.answer_content_nohtml = that.filterHTMLTag(item.answer_content)
             })
-            this.textLiveData = Object.assign({}, textLiveData);
+            that.textLiveData = Object.assign({}, textLiveData);
         },
         //文字直播切换展开文字
         toggleTextLiveItem(e) {
@@ -1143,10 +1149,10 @@ var vm = new Vue({
                 this.modal_error.content = '请先上传ppt再进行该操作'
                 return
             }
-            if (this.versions().webKit){
+            if (window.__wxjs_environment != 'miniprogram'){
                 this.modal_error.status = true
                 this.modal_error.title = '操作失败'
-                this.modal_error.content = '语音录音操作暂时仅支持移动端'
+                this.modal_error.content = '语音录音操作暂时仅支持小程序端'
                 return
             }
             //console.log('开始录音')
@@ -2072,8 +2078,15 @@ var vm = new Vue({
                 android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
                 iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
                 iPad: u.indexOf('iPad') > -1, //是否iPad
-                webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+                webApp: u.indexOf('Safari') == -1, //是否web应该程序，没有头部与底部
+                wx: u.toLowerCase().match(/MicroMessenger/i) == 'micromessenger'
             };
+        },
+        filterHTMLTag(msg) {
+            var msg = msg.replace(/<\/?[^>]*>/g, ''); //去除HTML Tag
+            msg = msg.replace(/[|]*\n/, '') //去除行尾空格
+            msg = msg.replace(/&npsp;/ig, ''); //去掉npsp
+            return msg;
         },
         /*
          * 频率控制 返回函数连续调用时，fn 执行频率限定为每多少时间执行一次

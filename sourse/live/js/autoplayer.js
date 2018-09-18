@@ -105,18 +105,18 @@ var player = {
         //     document.addEventListener("mousemove", this.moveFn, !1)
         //     document.addEventListener("mouseup", this.endFn, !1)
         // }
+        this.time = this.time + 1
     },
     beforeDestroyed() {
         this.removeEventListeners()
     },
     watch: {
         ended(ended) {
-            console.log(ended + ' ended')
+            //console.log(ended + ' ended')
             this.ended = ended
             this.playState = ended ? 2 : 0
         },
         time(time) {
-            console.log(time)
             this.time = time
         },
         current(current) {
@@ -215,8 +215,8 @@ var player = {
         },
         //修改播放的状态
         playing: function() {
-            console.log('playing')
-            console.log(this.audioState + ' this.audioState')
+            // console.log('playing')
+            // console.log(this.audioState + ' this.audioState')
             this.bufferState = false
             if (this.audioState) {
                 this._events.pause[0](this.mid)
@@ -258,13 +258,13 @@ var player = {
 
         //h5端的touch事件
         progressTouchStart(e) {
-            console.log(e)
+            //console.log(e)
             this.touch.initiated = true
             this.touch.startX = e.touches[0].pageX
             this.touch.left = this.$refs.progress.clientWidth
         },
         progressTouchMove(e) {
-            console.log(e)
+            //console.log(e)
             if (!this.touch.initiated) {
                 return
             }
@@ -274,19 +274,19 @@ var player = {
             this._offset(offsetWidth)
         },
         progressTouchEnd(e) {
-            console.log(e)
+            //console.log(e)
             this.touch.initiated = false
             this._triggerPercent()
         },
         progressClick(e) {
-            console.log(e)
+            //console.log(e)
             this._offset(e.offsetX)
             this._triggerPercent()
         },
         _triggerPercent() {
             const barWidth = this.$refs.progressBar.clientWidth * 1 - this.progressBtnWidth
             const percent = this.$refs.progress.clientWidth / barWidth
-            console.log(percent)
+            //console.log(percent)
             // this.currentTime = percent * this.duration
             // this.$refs.audio.currentTime = this.currentTime
             this.currentTime = percent * this.time
@@ -297,10 +297,10 @@ var player = {
             // }
         },
         progressMousemove(e) {
-            console.log(e)
+            //console.log(e)
         },
         progressMouseup(e) {
-            console.log(e)
+            //console.log(e)
         },
         moveFn(e) {
             //console.log(e.clientX)
@@ -330,7 +330,7 @@ var player = {
             this._events.seek[0](this.currentTime)
         },
         progressMousedown(e) {
-            console.log('progressMousedown')
+            //console.log('progressMousedown')
             this.startX = e.pageX
             this.startWidth = this.$refs.progress.style.width
             this.barWidth = this.$refs.progressBar.style.width

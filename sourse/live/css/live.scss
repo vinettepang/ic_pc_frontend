@@ -1811,7 +1811,7 @@ header.header {
         line-height: 1.59;
         letter-spacing: normal;
         color: #4a4a4a;
-        margin-bottom: 9px;
+
      /*   display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 3;
@@ -1825,17 +1825,26 @@ header.header {
         width:100%;
     }
     .multi-ellipsis::after{
-        content:"...";
-        font-weight:bold;
-        position:absolute;
-        bottom:0;
-        right:0;
-        padding-left:10px;
-        background:#fff;
+        // content:"...";
+        // font-weight:bold;
+        // position:absolute;
+        // bottom:0;
+        // right:0;
+        // padding-left:10px;
+        // background:#fff;
         // background: -webkit-linear-gradient(left, transparent, #fff 42%);
         // background: -o-linear-gradient(right, transparent, #fff 42%);
         // background: -moz-linear-gradient(right, transparent, #fff 42%);
         // background: linear-gradient(to right, transparent, #fff 42%);
+    }
+    .btn-dot{
+        display: block;
+        line-height: 1.59;
+        font-size: 20px;
+        text-align: left;
+        display: block;
+        font-weight: bold;
+        margin-bottom: 9px;
     }
     .btn-open{
       font-size: 15px;
