@@ -836,17 +836,6 @@ var liveTimer = {
   }
 
 };
-'use strict';
-
-var login = {
-  template: '\n  <div class="loginAlert">\n    <slot></slot>\n    <img class="weixinImg" :src="wexinImg" alt="">\n    <div class="about">\n      <p>\u5FAE\u4FE1\u626B\u7801\u5173\u6CE8\u300C\u767D\u718A\u5C0F\u52A9\u624B\u300D</p>\n      <p>\u8FDB\u884C\u767B\u5F55/\u6CE8\u518C</p>\n    </div>\n  </div>',
-  props: {
-    wexinImg: {
-      type: String,
-      default: ''
-    }
-  }
-};
 "use strict";
 
 var modal = {
@@ -860,6 +849,17 @@ var modal = {
   },
   create: function create() {
     console.log(this.modal);
+  }
+};
+'use strict';
+
+var login = {
+  template: '\n  <div class="loginAlert">\n    <slot></slot>\n    <img class="weixinImg" :src="wexinImg" alt="">\n    <div class="about">\n      <p>\u5FAE\u4FE1\u626B\u7801\u5173\u6CE8\u300C\u767D\u718A\u5C0F\u52A9\u624B\u300D</p>\n      <p>\u8FDB\u884C\u767B\u5F55/\u6CE8\u518C</p>\n    </div>\n  </div>',
+  props: {
+    wexinImg: {
+      type: String,
+      default: ''
+    }
   }
 };
 'use strict';

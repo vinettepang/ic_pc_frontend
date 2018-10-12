@@ -267,7 +267,7 @@ Vue.prototype.global = {
         }else{
             return -1;//不是ie浏览器
         }
-    }
+    },
 }
 
 /*头部*/
@@ -293,7 +293,8 @@ var header = new Vue({
             globalUid:null, //用户信息
             moreTextState: false,
             mess_page: 1,
-            mess_prevPage: 1
+            mess_prevPage: 1,
+            locationPathname:window.location.pathname,
         }
     },
     watch: {
@@ -319,6 +320,29 @@ var header = new Vue({
     computed:{
         getCountryCode:function(){   //person.id为当前用户id
             return "+"+ this.global.reg.country_code;
+        },
+        isContainStr(containStr){
+            return function (containStr) {
+                let str = window.location.href
+                let containStatus = false
+                if (typeof(containStr) === 'object') {
+                    for (var i = 0; i < containStr.length; i++) {
+                        if (str.indexOf(containStr[i]) !== -1) {
+                            containStatus = true;
+                            break;
+                        }else{
+                            containStatus = false;
+                        }
+                    }
+                    return containStatus
+                }else{
+                    if (str.indexOf(containStr) !== -1) {
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+            }
         }
     },
     methods: {

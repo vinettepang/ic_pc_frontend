@@ -231,6 +231,45 @@ header {
             @extend .triangle-icon;
         }
     }
+    .header-nav {
+        .header-nav-dropdown{
+            position: relative;
+            top: 0;
+        }
+        .dropdownMenu{
+            a{
+                display: block;
+                width: 120px;
+                color: #482929;
+                height: 32px;
+                line-height: 32px;
+                margin: 0;
+                margin-bottom: 5px;
+                font-size: 14px;
+                font-weight: normal;
+                letter-spacing: normal;
+                text-align: center;
+                box-sizing: border-box;
+                &:hover,&.active{
+                    background-color: #e4e1fa;
+                    &:before{
+                        content: '';
+                        width: 0;
+                        height: 0;
+                    }
+                }
+                &:last-child{
+                    margin: 0;
+                }
+            }
+        }
+        .ivu-select-dropdown{
+            left:-42px !important;
+            width: 120px;
+            padding: 10px 0;
+            margin: 0;
+        }
+    }
 }
 
 
